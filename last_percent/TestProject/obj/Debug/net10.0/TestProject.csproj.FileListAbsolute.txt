@@ -1,0 +1,14 @@
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\bin\Debug\net10.0\TestProject.exe
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\bin\Debug\net10.0\TestProject.deps.json
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\bin\Debug\net10.0\TestProject.runtimeconfig.json
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\bin\Debug\net10.0\TestProject.dll
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\bin\Debug\net10.0\TestProject.pdb
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\TestProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\TestProject.AssemblyInfoInputs.cache
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\TestProject.AssemblyInfo.cs
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\TestProject.csproj.CoreCompileInputs.cache
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\TestProject.dll
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\refint\TestProject.dll
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\TestProject.pdb
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\TestProject.genruntimeconfig.cache
+C:\Users\user\OneDrive\Desktop\last_percent\TestProject\obj\Debug\net10.0\ref\TestProject.dll

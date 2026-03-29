@@ -1,0 +1,6 @@
+@last_percent_server_HostAddress = http://localhost:5249
+
+GET {{last_percent_server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
