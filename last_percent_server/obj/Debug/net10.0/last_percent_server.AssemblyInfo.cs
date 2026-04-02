@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("last_percent_server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+10d2ca0b20bde721669c52d3001e76191f6d42fb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e45bbeeda2be0fcb11d1cfebcd2e99c39f6ca12")]
 [assembly: System.Reflection.AssemblyProductAttribute("last_percent_server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("last_percent_server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
