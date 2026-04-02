@@ -17,6 +17,7 @@ public class AppDbContext : DbContext
     public DbSet<FriendRequest> FriendRequests { get; set; }
     public DbSet<Friendship> Friendships { get; set; }
     public DbSet<NotificationLog> NotificationLogs { get; set; }
+    public DbSet<AdminUser> AdminUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
