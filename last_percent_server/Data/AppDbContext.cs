@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<Session> Sessions { get; set; }
     public DbSet<Match> Matches { get; set; }
     public DbSet<WaitingQueue> WaitingQueues { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
