@@ -3,50 +3,40 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace last_percent_server.Models;
 
+[Table("sessions")]
 public class Session
 {
     [Key]
-    public Guid SessionId { get; set; } = Guid.NewGuid();
-
-    public int? UserId { get; set; }
-
-    [NotMapped]
-    public User? User { get; set; }
-
-    public int BatteryAtStart { get; set; }
-    public int CurrentBattery { get; set; }
-
-    public bool CurrentlyCharging { get; set; } = false;
-    public bool Battery15Triggered { get; set; } = false;
-    public bool Battery5Triggered { get; set; } = false;
+    [Column("id")]
+    public int Id { get; set; }
 
     [Required]
-    [MaxLength(20)]
-    public SessionState State { get; set; } = SessionState.Waiting;
+    [Column("user_id")]
+    public int UserId { get; set; }
 
+    [ForeignKey("UserId")]
+    public User? User { get; set; }
+
+    [Column("started_at")]
+    public DateTime StartedAt { get; set; } = DateTime.UtcNow;
+
+    [Column("ended_at")]
     public DateTime? EndedAt { get; set; }
 
-    [MaxLength(20)]
-    public SessionEndReason? EndReason { get; set; }
+    [Required]
+    [Column("starting_battery_level")]
+    public int StartingBatteryLevel { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    [Column("ending_battery_level")]
+    public int? EndingBatteryLevel { get; set; }
+
+    [Required]
+    [Column("status")]
+    public SessionStatus Status { get; set; } = SessionStatus.Active;
 }
 
-public enum SessionState
+public enum SessionStatus
 {
-    Waiting,
-    Matched,
-    Awaiting15,
-    Awaiting5,
-    Completed,
-    Expired
-}
-
-public enum SessionEndReason
-{
-    BatteryDied,
-    UserClosed,
-    Switched,
-    Completed
+    Active,
+    Ended
 }
