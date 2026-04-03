@@ -1,9 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using last_percent_server.Data;
+using last_percent_server.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add CORS so clients (e.g. Flutter/web) can reach the API
+builder.Services.AddControllers();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -12,20 +17,42 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Configure Entity Framework Core with MySQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    // Configure Pomelo EF Core MySQL provider
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
+
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // In development, skip HTTPS redirection so plain HTTP requests work
 }
 else
 {
@@ -34,10 +61,13 @@ else
 
 app.UseCors();
 
-// Root endpoint to verify API is running
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
 app.MapGet("/", () => Results.Ok(new { message = "Welcome to the Last Percent API!", status = "running" }));
 
-// Test endpoint to verify Database Connection
 app.MapGet("/db-status", async (AppDbContext db) => 
 {
     try
