@@ -65,6 +65,8 @@ public static class DependencyInjection
             };
         });
 
+        services.AddSignalR();
+
         return services;
     }
 
@@ -73,6 +75,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ISessionService, SessionService>();
         services.AddScoped<IQueueService, QueueService>();
+        services.AddScoped<IMatchmakingService, MatchmakingService>();
         
         return services;
     }

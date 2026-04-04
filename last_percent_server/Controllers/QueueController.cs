@@ -1,8 +1,10 @@
 using System.Security.Claims;
+using last_percent_server.Hubs;
 using last_percent_server.Models.DTOs;
 using last_percent_server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace last_percent_server.Controllers;
 
@@ -12,10 +14,17 @@ namespace last_percent_server.Controllers;
 public class QueueController : ControllerBase
 {
     private readonly IQueueService _queueService;
+    private readonly IMatchmakingService _matchmakingService;
+    private readonly IHubContext<MatchmakingHub> _hubContext;
 
-    public QueueController(IQueueService queueService)
+    public QueueController(
+        IQueueService queueService, 
+        IMatchmakingService matchmakingService, 
+        IHubContext<MatchmakingHub> hubContext)
     {
         _queueService = queueService;
+        _matchmakingService = matchmakingService;
+        _hubContext = hubContext;
     }
 
     [HttpPost("join")]
@@ -30,7 +39,20 @@ public class QueueController : ControllerBase
         if (entry == null)
             return BadRequest(new { message = "Could not join queue. Make sure you have an active session." });
 
-        return CreatedAtAction(nameof(JoinQueue), new { id = entry.Id }, entry);
+        var matchResult = await _matchmakingService.TryMatchAsync(userId);
+        if (matchResult != null)
+        {
+            if (MatchmakingHub.UserConnections.TryGetValue(matchResult.User1Id, out var connection1))
+            {
+                await _hubContext.Clients.Client(connection1).SendAsync("MatchFound", new { matchId = matchResult.MatchId });
+            }
+            if (MatchmakingHub.UserConnections.TryGetValue(matchResult.User2Id, out var connection2))
+            {
+                await _hubContext.Clients.Client(connection2).SendAsync("MatchFound", new { matchId = matchResult.MatchId });
+            }
+        }
+
+        return Ok(new { status = "waiting" });
     }
 
     [HttpPost("leave")]

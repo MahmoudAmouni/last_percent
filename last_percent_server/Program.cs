@@ -1,16 +1,15 @@
 using last_percent_server.Data;
 using last_percent_server.Extensions;
+using last_percent_server.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Add Services
 builder.Services.AddControllers();
-builder.Services.AddInfrastructure(builder.Configuration); // Modular infrastructure setup
-builder.Services.AddApplicationServices();              // Modular application services setup
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
-// 2. Configure HTTP Pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
@@ -38,6 +37,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<MatchmakingHub>("/hubs/matchmaking");
 
 app.MapGet("/", () => Results.Ok(new { message = "Welcome to the Last Percent API!", status = "running" }));
 
