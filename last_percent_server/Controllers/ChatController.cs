@@ -1,5 +1,5 @@
-using System.Security.Claims;
 using last_percent_server.Data;
+using last_percent_server.Extensions;
 using last_percent_server.Hubs;
 using last_percent_server.Models.DTOs;
 using last_percent_server.Services;
@@ -29,118 +29,60 @@ public class ChatController : ControllerBase
     [HttpGet("{matchId}/messages")]
     public async Task<IActionResult> GetMessages(int matchId)
     {
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
-            return Unauthorized();
-
-        try
-        {
-            var messages = await _chatService.GetMatchMessagesAsync(matchId, userId);
-            return Ok(messages);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Forbid();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, new { message = "An internal error occurred." });
-        }
+        var userId = this.GetUserId();
+        var messages = await _chatService.GetMatchMessagesAsync(matchId, userId);
+        return Ok(messages);
     }
 
     [HttpPost("{matchId}/send")]
     public async Task<IActionResult> SendMessage(int matchId, [FromBody] SendMessageDto sendMessageDto)
     {
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
-            return Unauthorized();
+        var userId = this.GetUserId();
+        var message = await _chatService.SendMessageAsync(matchId, userId, sendMessageDto.Content);
 
-        try
+        var match = await _context.Matches.FirstOrDefaultAsync(m => m.Id == matchId);
+        if (match == null) return NotFound();
+
+        var recipientId = match.User1Id == userId ? match.User2Id : match.User1Id;
+
+        if (MatchmakingHub.UserConnections.TryGetValue(recipientId, out var connectionId))
         {
-            var message = await _chatService.SendMessageAsync(matchId, userId, sendMessageDto.Content);
-
-            var match = await _context.Matches.FirstOrDefaultAsync(m => m.Id == matchId);
-            if (match == null) return NotFound();
-
-            var recipientId = match.User1Id == userId ? match.User2Id : match.User1Id;
-
-            if (MatchmakingHub.UserConnections.TryGetValue(recipientId, out var connectionId))
-            {
-                await _hubContext.Clients.Client(connectionId).SendAsync("MessageReceived", new
-                {
-                    messageId = message.Id,
-                    matchId = message.MatchId,
-                    senderId = message.SenderId,
-                    content = message.Content,
-                    sentAt = message.SentAt
-                });
-            }
-
-            return Ok(new
+            await _hubContext.Clients.Client(connectionId).SendAsync("MessageReceived", new
             {
                 messageId = message.Id,
+                matchId = message.MatchId,
+                senderId = message.SenderId,
+                content = message.Content,
                 sentAt = message.SentAt
             });
         }
-        catch (KeyNotFoundException ex)
+
+        return Ok(new
         {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Forbid();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An internal error occurred." + ex.Message });
-        }
+            messageId = message.Id,
+            sentAt = message.SentAt
+        });
     }
 
     [HttpPost("{matchId}/read")]
     public async Task<IActionResult> MarkAsRead(int matchId)
     {
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
-            return Unauthorized();
+        var userId = this.GetUserId();
+        await _chatService.MarkMessagesAsReadAsync(matchId, userId);
 
-        try
+        var match = await _context.Matches.FirstOrDefaultAsync(m => m.Id == matchId);
+        if (match == null) return NotFound();
+
+        var partnerId = match.User1Id == userId ? match.User2Id : match.User1Id;
+
+        if (MatchmakingHub.UserConnections.TryGetValue(partnerId, out var connectionId))
         {
-            await _chatService.MarkMessagesAsReadAsync(matchId, userId);
-
-            var match = await _context.Matches.FirstOrDefaultAsync(m => m.Id == matchId);
-            if (match == null) return NotFound();
-
-            var partnerId = match.User1Id == userId ? match.User2Id : match.User1Id;
-
-            if (MatchmakingHub.UserConnections.TryGetValue(partnerId, out var connectionId))
-            {
-                await _hubContext.Clients.Client(connectionId).SendAsync("MessagesRead", new 
-                { 
-                    matchId = matchId 
-                });
-            }
-
-            return Ok();
+            await _hubContext.Clients.Client(connectionId).SendAsync("MessagesRead", new 
+            { 
+                matchId = matchId 
+            });
         }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Forbid();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An internal error occurred." + ex.Message });
-        }
+
+        return Ok();
     }
 }

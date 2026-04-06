@@ -4,6 +4,6 @@ namespace last_percent_server.Services;
 
 public interface IAuthService
 {
-    Task<string?> RegisterAsync(RegisterDto registerDto);
-    Task<string?> LoginAsync(LoginDto loginDto);
+    Task<string> RegisterAsync(RegisterDto registerDto);
+    Task<string> LoginAsync(LoginDto loginDto);
 }

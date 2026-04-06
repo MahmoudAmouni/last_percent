@@ -20,16 +20,18 @@ public class AuthService : IAuthService
         _configuration = configuration;
     }
 
-    public async Task<string?> RegisterAsync(RegisterDto registerDto)
+    public async Task<string> RegisterAsync(RegisterDto registerDto)
     {
         if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
-            return null;
+        {
+            throw new InvalidOperationException("Email already exists.");
+        }
 
         var user = new User
         {
             Email = registerDto.Email,
             Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
-            IsEmailVerified = true // Auto-verifying for now as discussed
+            IsEmailVerified = true 
         };
 
         _context.Users.Add(user);
@@ -38,12 +40,14 @@ public class AuthService : IAuthService
         return GenerateToken(user);
     }
 
-    public async Task<string?> LoginAsync(LoginDto loginDto)
+    public async Task<string> LoginAsync(LoginDto loginDto)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password))
-            return null;
+        {
+            throw new UnauthorizedAccessException("Invalid email or password.");
+        }
 
         return GenerateToken(user);
     }

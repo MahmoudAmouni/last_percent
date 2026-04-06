@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using last_percent_server.Extensions;
 using last_percent_server.Models.DTOs;
 using last_percent_server.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -21,40 +21,23 @@ public class SessionController : ControllerBase
     [HttpPost("start")]
     public async Task<IActionResult> StartSession([FromBody] StartSessionDto startSessionDto)
     {
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
-            return Unauthorized();
-
+        var userId = this.GetUserId();
         var session = await _sessionService.StartSessionAsync(userId, startSessionDto.StartingBatteryLevel);
-        
-        if (session == null)
-            return BadRequest(new { message = "Could not start session. Battery must be 20% or below." });
-
         return CreatedAtAction(nameof(StartSession), new { id = session.Id }, session);
     }
 
     [HttpPost("end")]
     public async Task<IActionResult> EndSession([FromBody] int endingBatteryLevel)
     {
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
-            return Unauthorized();
-
-        var success = await _sessionService.EndSessionAsync(userId, endingBatteryLevel);
-        
-        if (!success)
-            return BadRequest(new { message = "No active session found to end." });
-
+        var userId = this.GetUserId();
+        await _sessionService.EndSessionAsync(userId, endingBatteryLevel);
         return Ok(new { message = "Session ended successfully." });
     }
 
     [HttpGet("active")]
     public async Task<IActionResult> GetActiveSession()
     {
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
-            return Unauthorized();
-
+        var userId = this.GetUserId();
         var session = await _sessionService.GetActiveSessionAsync(userId);
         
         if (session == null)

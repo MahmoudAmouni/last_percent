@@ -13,10 +13,12 @@ public class SessionService : ISessionService
         _context = context;
     }
 
-    public async Task<Session?> StartSessionAsync(int userId, int batteryLevel)
+    public async Task<Session> StartSessionAsync(int userId, int batteryLevel)
     {
         if (batteryLevel > 20)
-            return null;
+        {
+            throw new InvalidOperationException("Battery level must be 20% or less to start a session.");
+        }
 
         var activeSessions = await _context.Sessions
             .Where(s => s.UserId == userId && s.Status == SessionStatus.Active)
@@ -48,17 +50,18 @@ public class SessionService : ISessionService
             .FirstOrDefaultAsync(s => s.UserId == userId && s.Status == SessionStatus.Active);
     }
 
-    public async Task<bool> EndSessionAsync(int userId, int endingBatteryLevel)
+    public async Task EndSessionAsync(int userId, int endingBatteryLevel)
     {
         var session = await GetActiveSessionAsync(userId);
         if (session == null)
-            return false;
+        {
+            throw new KeyNotFoundException("No active session found to end.");
+        }
 
         session.Status = SessionStatus.Ended;
         session.EndedAt = DateTime.UtcNow;
         session.EndingBatteryLevel = endingBatteryLevel;
 
         await _context.SaveChangesAsync();
-        return true;
     }
 }

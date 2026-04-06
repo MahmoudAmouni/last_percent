@@ -15,12 +15,13 @@ public class QueueService : IQueueService
         _sessionService = sessionService;
     }
 
-    public async Task<WaitingQueue?> JoinQueueAsync(int userId, int batteryLevel)
+    public async Task<WaitingQueue> JoinQueueAsync(int userId, int batteryLevel)
     {
-        // 1. Check for active session
         var session = await _sessionService.GetActiveSessionAsync(userId);
         if (session == null)
-            return null; // Cannot join queue without an active session
+        {
+            throw new InvalidOperationException("Could not join queue. Make sure you have an active session.");
+        }
 
         // 2. Check if already in queue
         var existingQueueEntry = await _context.WaitingQueues
@@ -52,23 +53,31 @@ public class QueueService : IQueueService
         return queueEntry;
     }
 
-    public async Task<bool> LeaveQueueAsync(int userId)
+    public async Task LeaveQueueAsync(int userId)
     {
         var entry = await _context.WaitingQueues
             .FirstOrDefaultAsync(q => q.UserId == userId && q.Status == QueueStatus.Waiting);
 
         if (entry == null)
-            return false;
+        {
+            throw new InvalidOperationException("Could not leave the queue because you were not in it.");
+        }
 
         entry.Status = QueueStatus.Cancelled;
         await _context.SaveChangesAsync();
-        return true;
     }
 
-    public async Task<WaitingQueue?> GetQueueStatusAsync(int userId)
+    public async Task<WaitingQueue> GetQueueStatusAsync(int userId)
     {
-        return await _context.WaitingQueues
+        var entry = await _context.WaitingQueues
             .OrderByDescending(q => q.QueuedAt)
             .FirstOrDefaultAsync(q => q.UserId == userId && q.Status == QueueStatus.Waiting);
+
+        if (entry == null)
+        {
+            throw new KeyNotFoundException("You are not currently in the queue.");
+        }
+
+        return entry;
     }
 }
