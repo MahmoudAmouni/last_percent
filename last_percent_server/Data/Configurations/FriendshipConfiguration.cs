@@ -8,7 +8,6 @@ public class FriendshipConfiguration : IEntityTypeConfiguration<Friendship>
 {
     public void Configure(EntityTypeBuilder<Friendship> builder)
     {
-        // Unique constraint on (User1Id, User2Id) to prevent duplicate friendships
         builder.HasIndex(f => new { f.User1Id, f.User2Id })
             .IsUnique();
 
