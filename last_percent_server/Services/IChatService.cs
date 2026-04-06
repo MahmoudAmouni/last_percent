@@ -6,4 +6,5 @@ public interface IChatService
 {
     Task<IEnumerable<Message>> GetMatchMessagesAsync(int matchId, int userId);
     Task<Message> SendMessageAsync(int matchId, int userId, string content);
+    Task MarkMessagesAsReadAsync(int matchId, int userId);
 }

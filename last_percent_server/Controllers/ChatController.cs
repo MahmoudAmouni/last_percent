@@ -103,4 +103,44 @@ public class ChatController : ControllerBase
             return StatusCode(500, new { message = "An internal error occurred." + ex.Message });
         }
     }
+
+    [HttpPost("{matchId}/read")]
+    public async Task<IActionResult> MarkAsRead(int matchId)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+            return Unauthorized();
+
+        try
+        {
+            await _chatService.MarkMessagesAsReadAsync(matchId, userId);
+
+            var match = await _context.Matches.FirstOrDefaultAsync(m => m.Id == matchId);
+            if (match == null) return NotFound();
+
+            var partnerId = match.User1Id == userId ? match.User2Id : match.User1Id;
+
+            if (MatchmakingHub.UserConnections.TryGetValue(partnerId, out var connectionId))
+            {
+                await _hubContext.Clients.Client(connectionId).SendAsync("MessagesRead", new 
+                { 
+                    matchId = matchId 
+                });
+            }
+
+            return Ok();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Forbid();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An internal error occurred." + ex.Message });
+        }
+    }
 }
