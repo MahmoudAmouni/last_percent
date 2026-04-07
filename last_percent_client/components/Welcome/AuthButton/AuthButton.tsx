@@ -16,13 +16,14 @@ interface AuthButtonProps {
   textStyle?: TextStyle;
 }
 
-const AuthButton: React.FC<AuthButtonProps> = ({ 
-  title, 
-  onPress, 
-  variant = 'primary', 
-  style, 
-  textStyle 
-}) => {
+function AuthButton(props: AuthButtonProps) {
+  const { 
+    title, 
+    onPress, 
+    variant = 'primary', 
+    style, 
+    textStyle 
+  } = props;
   const handlePress = () => {
     if (Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

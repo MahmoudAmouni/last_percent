@@ -12,7 +12,7 @@ import { styles } from './BatteryIcon.styles';
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 
-const BatteryIcon = () => {
+function BatteryIcon() {
   const opacity = useSharedValue(0.4);
 
   useEffect(() => {

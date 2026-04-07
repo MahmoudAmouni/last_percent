@@ -17,12 +17,14 @@ import Animated, {
   FadeIn
 } from 'react-native-reanimated';
 import * as NavigationBar from 'expo-navigation-bar';
+import { useRouter } from 'expo-router';
 
-import BatteryIcon from '../../../components/BatteryIcon/BatteryIcon';
-import AuthButton from '../../../components/AuthButton/AuthButton';
+import BatteryIcon from '../../../components/Welcome/BatteryIcon/BatteryIcon';
+import AuthButton from '../../../components/Welcome/AuthButton/AuthButton';
 import { styles } from './WelcomeScreen.styles';
 
 const WelcomeScreen = () => {
+  const router = useRouter();
   const titleOpacity = useSharedValue(0);
   const subtitleOpacity = useSharedValue(0);
 
@@ -81,13 +83,13 @@ const WelcomeScreen = () => {
             <AuthButton 
               title="LOGIN" 
               variant="primary"
-              onPress={() => console.log('Login pressed')} 
+              onPress={() => router.push('/(auth)/login')} 
               style={styles.button}
             />
             <AuthButton 
               title="CREATE ACCOUNT" 
               variant="secondary"
-              onPress={() => console.log('Signup pressed')} 
+              onPress={() => router.push('/(auth)/register')} 
               style={styles.button}
             />
             
