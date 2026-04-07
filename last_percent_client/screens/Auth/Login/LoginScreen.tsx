@@ -22,39 +22,36 @@ import BatteryIcon from '@/components/Welcome/BatteryIcon/BatteryIcon';
 import FormInput from '../../../components/Login/FormInput/FormInput';
 import { styles } from './LoginScreen.styles';
 import { useAuthStore } from '@/store/authStore';
+import { useLogin } from '@/hooks/useAuth';
 
-const LoginScreen = () => {
+function LoginScreen() {
   const router = useRouter();
-  const setAuth = useAuthStore((state) => state.setAuth);
-  
+  const loginMutation = useLogin();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
 
-    setLoading(true);
     setError('');
 
-    try {
-      
-      setTimeout(async () => {
-        await setAuth(
-          { id: '1', email, isEmailVerified: true },
-          'mock-jwt-token'
-        );
-        router.replace('/(app)/battery-gate');
-        setLoading(false);
-      }, 1500);
-    } catch (err) {
-      setError('Invalid email or password');
-      setLoading(false);
-    }
+    loginMutation.mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          router.replace('/(app)/battery-gate');
+        },
+        onError: (err: any) => {
+          console.error('Login Mutation Error:', err);
+          setError(err?.response?.data?.message || 'Invalid email or password or backend unavailable');
+        }
+      }
+    );
   };
 
   return (
@@ -115,7 +112,7 @@ const LoginScreen = () => {
                 </TouchableOpacity>
 
                 <AuthButton
-                  title={loading ? "LOGGING IN..." : "LOGIN"}
+                  title={loginMutation.isPending ? "LOGGING IN..." : "LOGIN"}
                   onPress={handleLogin}
                   style={styles.loginButton}
                 />

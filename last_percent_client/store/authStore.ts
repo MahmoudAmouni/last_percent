@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
 interface User {
   id: string;
@@ -22,17 +23,31 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
 
   setAuth: async (user, token) => {
-    await SecureStore.setItemAsync('jwt_token', token);
+    if (Platform.OS === 'web') {
+      if (typeof localStorage !== 'undefined') localStorage.setItem('jwt_token', token);
+    } else {
+      await SecureStore.setItemAsync('jwt_token', token);
+    }
     set({ user, token, isAuthenticated: true });
   },
 
   clearAuth: async () => {
-    await SecureStore.deleteItemAsync('jwt_token');
+    if (Platform.OS === 'web') {
+      if (typeof localStorage !== 'undefined') localStorage.removeItem('jwt_token');
+    } else {
+      await SecureStore.deleteItemAsync('jwt_token');
+    }
     set({ user: null, token: null, isAuthenticated: false });
   },
 
   initializeAuth: async () => {
-    const token = await SecureStore.getItemAsync('jwt_token');
+    let token = null;
+    if (Platform.OS === 'web') {
+      if (typeof localStorage !== 'undefined') token = localStorage.getItem('jwt_token');
+    } else {
+      token = await SecureStore.getItemAsync('jwt_token');
+    }
+
     if (token) {
       set({ token, isAuthenticated: true });
     }
