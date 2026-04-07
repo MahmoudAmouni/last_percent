@@ -30,6 +30,7 @@ public class AuthService : IAuthService
         var user = new User
         {
             Email = registerDto.Email,
+            PhoneNumber = registerDto.PhoneNumber,
             Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
             IsEmailVerified = true 
         };

@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { login } from '@/api/auth';
+import { login, register } from '@/api/auth';
 import { useAuthStore } from '@/store/authStore';
 import { jwtDecode } from 'jwt-decode';
-import { LoginDto } from '@/types';
+import { LoginDto, RegisterDto } from '@/types';
 
 interface DecodedToken {
   nameid: string; 
@@ -29,6 +29,31 @@ export function useLogin() {
         );
       } catch (e) {
         console.error('Failed to decode token after login:', e);
+        throw new Error('Invalid authentication token received.');
+      }
+    },
+  });
+}
+
+export function useRegister() {
+  const setAuth = useAuthStore((state) => state.setAuth);
+
+  return useMutation({
+    mutationFn: (data: RegisterDto) => register(data),
+    onSuccess: async (data, variables) => {
+      try {
+        const decoded = jwtDecode<DecodedToken>(data.token);
+        
+        await setAuth(
+          {
+            id: decoded.nameid,
+            email: decoded.email || variables.email,
+            isEmailVerified: true, 
+          },
+          data.token
+        );
+      } catch (e) {
+        console.error('Failed to decode token after register:', e);
         throw new Error('Invalid authentication token received.');
       }
     },
