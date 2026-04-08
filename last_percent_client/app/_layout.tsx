@@ -42,10 +42,14 @@ export default function RootLayout() {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    if (matchStatus === MatchStatus.Matched) {
-      // router.push('/(app)/chat'); 
+    if (!isLoaded) return;
+
+    if (isAuthenticated) {
+      router.replace('/(app)/battery-gate');
+    } else {
+      router.replace('/(auth)');
     }
-  }, [matchStatus]);
+  }, [isLoaded, isAuthenticated]);
 
   if (!isLoaded) return null;
 
@@ -55,6 +59,7 @@ export default function RootLayout() {
         <View style={styles.webContainer}>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(app)" />
           </Stack>
           <StatusBar style="auto" />
         </View>
