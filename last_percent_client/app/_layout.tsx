@@ -3,7 +3,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View, StyleSheet } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -30,11 +30,29 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(auth)" />
-        </Stack>
-        <StatusBar style="auto" />
+        <View style={styles.webContainer}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(auth)" />
+          </Stack>
+          <StatusBar style="auto" />
+        </View>
       </ThemeProvider>
     </QueryClientProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  webContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+    width: '100%',
+    maxWidth: Platform.OS === 'web' ? 440 : undefined,
+    alignSelf: 'center',
+    ...(Platform.OS === 'web' && {
+      boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+      borderLeftWidth: 1,
+      borderRightWidth: 1,
+      borderColor: '#333',
+    }),
+  },
+});
