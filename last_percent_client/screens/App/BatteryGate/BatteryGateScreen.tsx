@@ -19,6 +19,7 @@ import Animated, {
   FadeInUp
 } from 'react-native-reanimated';
 
+import { useStartSession } from '@/hooks/useSession';
 import { styles } from './BatteryGateScreen.styles';
 
 
@@ -59,9 +60,13 @@ function BatteryGateScreen() {
     opacity: glowOpacity.value,
   }));
 
+  const startSessionMutation = useStartSession();
+
   const handleStartSession = () => {
     if (!isLocked) {
-      // router.push('/(app)/waiting');
+      startSessionMutation.mutate({ 
+        startingBatteryLevel: Math.round(mockBatteryLevel * 100) 
+      });
     }
   };
 
@@ -131,13 +136,21 @@ function BatteryGateScreen() {
             </View>
 
             <TouchableOpacity 
-              disabled={isLocked}
+              disabled={isLocked || startSessionMutation.isPending}
               onPress={handleStartSession}
-              style={[styles.button, isLocked && styles.buttonDisabled]}
+              style={[
+                styles.button, 
+                (isLocked || startSessionMutation.isPending) && styles.buttonDisabled
+              ]}
               activeOpacity={0.8}
             >
-              <Text style={[styles.buttonText, isLocked && styles.buttonTextDisabled]}>
-                {isLocked ? "CHECKING SENSORS..." : "START SESSION"}
+              <Text style={[
+                styles.buttonText, 
+                (isLocked || startSessionMutation.isPending) && styles.buttonTextDisabled
+              ]}>
+                {startSessionMutation.isPending 
+                  ? "INITIATING..." 
+                  : isLocked ? "CHECKING SENSORS..." : "START SESSION"}
               </Text>
             </TouchableOpacity>
           </Animated.View>

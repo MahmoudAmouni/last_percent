@@ -9,9 +9,9 @@ public class MatchmakingHub : Hub
 
     public override Task OnConnectedAsync()
     {
-        var userIdStr = Context.GetHttpContext()?.Request.Query["userId"].ToString();
+        var userIdClaim = Context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
 
-        if (int.TryParse(userIdStr, out var userId))
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var userId))
         {
             UserConnections[userId] = Context.ConnectionId;
         }
@@ -21,9 +21,9 @@ public class MatchmakingHub : Hub
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        var userIdStr = Context.GetHttpContext()?.Request.Query["userId"].ToString();
+        var userIdClaim = Context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
 
-        if (int.TryParse(userIdStr, out var userId))
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var userId))
         {
             UserConnections.TryRemove(userId, out _);
         }

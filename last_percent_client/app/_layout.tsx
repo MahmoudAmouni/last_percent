@@ -9,6 +9,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAuthStore } from '@/store/authStore';
+import { signalRService } from '@/services/signalR';
+import { useChatStore, MatchStatus } from '@/store/chatStore';
+import { useRouter } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(auth)',
@@ -16,14 +20,32 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const { isAuthenticated, initializeAuth } = useAuthStore();
+  const { matchStatus } = useChatStore();
+  const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 1000);
-    return () => clearTimeout(timer);
+    const init = async () => {
+      await initializeAuth();
+      setIsLoaded(true);
+    };
+    init();
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      signalRService.startConnection();
+    } else {
+      signalRService.stopConnection();
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (matchStatus === MatchStatus.Matched) {
+      // router.push('/(app)/chat'); 
+    }
+  }, [matchStatus]);
 
   if (!isLoaded) return null;
 
