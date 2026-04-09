@@ -12,7 +12,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuthStore } from '@/store/authStore';
 import { signalRService } from '@/services/signalR';
 import { useChatStore, MatchStatus } from '@/store/chatStore';
-import { useRouter } from 'expo-router';
+import { useRouter, useSegments } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(auth)',
@@ -41,15 +41,19 @@ export default function RootLayout() {
     }
   }, [isAuthenticated]);
 
+  const segments = useSegments();
+
   useEffect(() => {
     if (!isLoaded) return;
 
-    if (isAuthenticated) {
+    const inAppGroup = segments[0] === '(app)';
+
+    if (isAuthenticated && !inAppGroup) {
       router.replace('/(app)/battery-gate');
-    } else {
+    } else if (!isAuthenticated && inAppGroup) {
       router.replace('/(auth)');
     }
-  }, [isLoaded, isAuthenticated]);
+  }, [isLoaded, isAuthenticated, segments]);
 
   if (!isLoaded) return null;
 

@@ -1,8 +1,10 @@
 using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace last_percent_server.Hubs;
 
+[Authorize]
 public class MatchmakingHub : Hub
 {
     public static readonly ConcurrentDictionary<int, string> UserConnections = new();

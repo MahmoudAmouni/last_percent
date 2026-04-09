@@ -4,6 +4,8 @@ export default function AppLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="battery-gate" />
+      <Stack.Screen name="waiting" />
+      <Stack.Screen name="chat" />
     </Stack>
   );
 }
