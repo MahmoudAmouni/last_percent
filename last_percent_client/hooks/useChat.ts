@@ -1,10 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getMessages, sendMessage, markAsRead } from '@/api/chat';
 import { useChatStore } from '@/store/chatStore';
+import { useAuthStore } from '@/store/authStore';
 import { useEffect } from 'react';
 
 export const useChat = (matchId: number | null) => {
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
   const { setMessages, addMessage } = useChatStore();
 
   const { data: messages, isLoading, error } = useQuery({
@@ -29,14 +31,14 @@ export const useChat = (matchId: number | null) => {
 
   const sendMutation = useMutation({
     mutationFn: (content: string) => sendMessage(matchId!, { content }),
-    onSuccess: (data: any) => {
+    onSuccess: (data: any, content: string) => {
       // Add the message to the store immediately after successful send
       // since the server only broadcasts to the recipient
       addMessage({
         id: data.messageId,
         matchId: matchId!,
-        senderId: 0, // 0 will represent "me" in many stores, but we should use actual ID
-        content: data.content || '', // Handle this based on what SendMessage returns
+        senderId: Number(user?.id) || 0,
+        content: content,
         sentAt: data.sentAt
       });
     },
