@@ -1,4 +1,5 @@
 using last_percent_server.Data;
+using last_percent_server.Models;
 using last_percent_server.Extensions;
 using last_percent_server.Hubs;
 using last_percent_server.Models.DTOs;
@@ -82,6 +83,35 @@ public class ChatController : ControllerBase
                 matchId = matchId 
             });
         }
+
+        return Ok();
+    }
+
+    [HttpPost("{matchId}/leave")]
+    public async Task<IActionResult> LeaveChat(int matchId)
+    {
+        var userId = this.GetUserId();
+        
+        var match = await _context.Matches.FirstOrDefaultAsync(m => m.Id == matchId);
+        if (match == null) return NotFound();
+
+        if (match.User1Id != userId && match.User2Id != userId)
+            return Forbid();
+
+        var partnerId = match.User1Id == userId ? match.User2Id : match.User1Id;
+
+        
+        if (MatchmakingHub.UserConnections.TryGetValue(partnerId, out var connectionId))
+        {
+            await _hubContext.Clients.Client(connectionId).SendAsync("PartnerLeft", new 
+            { 
+                matchId = matchId 
+            });
+        }
+
+        
+        var reason = match.User1Id == userId ? MatchEndedReason.User1Switched : MatchEndedReason.User2Switched;
+        await _chatService.EndMatchAsync(matchId, userId, reason);
 
         return Ok();
     }

@@ -93,4 +93,25 @@ public class ChatService : IChatService
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task EndMatchAsync(int matchId, int userId, MatchEndedReason reason)
+    {
+        var match = await _context.Matches
+            .FirstOrDefaultAsync(m => m.Id == matchId);
+
+        if (match == null)
+            throw new KeyNotFoundException("Match not found.");
+
+        if (match.User1Id != userId && match.User2Id != userId)
+            throw new UnauthorizedAccessException("You are not part of this match.");
+
+        if (match.EndedAt != null)
+            return; 
+
+        match.EndedAt = DateTime.UtcNow;
+        match.EndedByUserId = userId;
+        match.EndedReason = reason;
+
+        await _context.SaveChangesAsync();
+    }
 }

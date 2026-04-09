@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getMessages, sendMessage, markAsRead } from '@/api/chat';
+import { getMessages, sendMessage, markAsRead, leaveChat } from '@/api/chat';
 import { useChatStore } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useEffect } from 'react';
@@ -44,11 +44,16 @@ export const useChat = (matchId: number | null) => {
     },
   });
 
+  const leaveMutation = useMutation({
+    mutationFn: () => leaveChat(matchId!),
+  });
+
   return {
     messages,
     isLoading,
     error,
     sendMessage: sendMutation.mutate,
     isSending: sendMutation.isPending,
+    leaveChat: leaveMutation.mutateAsync,
   };
 };

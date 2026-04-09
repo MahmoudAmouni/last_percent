@@ -59,6 +59,11 @@ class SignalRService {
       });
     });
 
+    this.connection.on('PartnerLeft', (data: { matchId: number }) => {
+      console.log('Partner left the match:', data.matchId);
+      useChatStore.getState().setPartnerPresent(false);
+    });
+
     this.connection.onreconnecting((error) => {
       console.warn('SignalR reconnecting...', error);
     });

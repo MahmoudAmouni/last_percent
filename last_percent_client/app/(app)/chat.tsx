@@ -8,7 +8,8 @@ import {
   TextInput, 
   FlatList, 
   KeyboardAvoidingView, 
-  Platform 
+  Platform,
+  Alert
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeIn, SlideInRight, SlideInLeft } from 'react-native-reanimated';
@@ -17,12 +18,16 @@ import { useRouter } from 'expo-router';
 import { useChat } from '@/hooks/useChat';
 import { useChatStore } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
+import { useSessionStore } from '@/store/sessionStore';
+import { useStartSession } from '@/hooks/useSession';
 
 export default function ChatScreen() {
   const router = useRouter();
-  const { matchId } = useChatStore();
+  const { matchId, isPartnerPresent, setPartnerPresent, clearMatch } = useChatStore();
   const { user } = useAuthStore();
-  const { sendMessage, isSending } = useChat(matchId);
+  const { batteryLevel } = useSessionStore();
+  const { sendMessage, isSending, leaveChat } = useChat(matchId);
+  const startSessionMutation = useStartSession();
   const messages = useChatStore((state) => state.messages);
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef<FlatList>(null);
@@ -41,6 +46,45 @@ export default function ChatScreen() {
       }, 100);
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (!isPartnerPresent) {
+      Alert.alert(
+        "Connection Lost",
+        "Your partner has left the terminal. Would you like to find another companion for your last percent?",
+        [
+          {
+            text: "Maybe Later",
+            style: "cancel",
+            onPress: () => handleBack()
+          },
+          {
+            text: "Find Someone New",
+            onPress: () => {
+              if (batteryLevel !== null) {
+                startSessionMutation.mutate({ startingBatteryLevel: batteryLevel });
+              } else {
+                router.replace('/(app)/battery-gate');
+              }
+            }
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+  }, [isPartnerPresent]);
+
+  const handleBack = async () => {
+    if (matchId) {
+      try {
+        await leaveChat();
+      } catch (err) {
+        console.error('Error leaving chat:', err);
+      }
+    }
+    clearMatch();
+    router.back();
+  };
 
   const renderMessage = ({ item }: { item: any }) => {
     const isMe = item.senderId === Number(user?.id) || item.senderId === 0;
@@ -69,7 +113,7 @@ export default function ChatScreen() {
       />
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color="#FFF" />
           </TouchableOpacity>
           <View style={styles.headerInfo}>

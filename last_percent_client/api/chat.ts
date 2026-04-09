@@ -26,3 +26,8 @@ export const markAsRead = async (matchId: number) => {
   const response = await apiClient.post(`/chat/${matchId}/read`);
   return response.data;
 };
+
+export const leaveChat = async (matchId: number) => {
+  const response = await apiClient.post(`/chat/${matchId}/leave`);
+  return response.data;
+};
