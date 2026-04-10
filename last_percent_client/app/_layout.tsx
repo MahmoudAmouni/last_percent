@@ -12,7 +12,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuthStore } from '@/store/authStore';
 import { signalRService } from '@/services/signalR';
 import { useChatStore, MatchStatus } from '@/store/chatStore';
-import { useRouter } from 'expo-router';
+import { useRouter, useSegments } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(auth)',
@@ -41,11 +41,19 @@ export default function RootLayout() {
     }
   }, [isAuthenticated]);
 
+  const segments = useSegments();
+
   useEffect(() => {
-    if (matchStatus === MatchStatus.Matched) {
-      // router.push('/(app)/chat'); 
+    if (!isLoaded) return;
+
+    const inAppGroup = segments[0] === '(app)';
+
+    if (isAuthenticated && !inAppGroup) {
+      router.replace('/(app)/battery-gate');
+    } else if (!isAuthenticated && inAppGroup) {
+      router.replace('/(auth)');
     }
-  }, [matchStatus]);
+  }, [isLoaded, isAuthenticated, segments]);
 
   if (!isLoaded) return null;
 
@@ -55,6 +63,7 @@ export default function RootLayout() {
         <View style={styles.webContainer}>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(app)" />
           </Stack>
           <StatusBar style="auto" />
         </View>

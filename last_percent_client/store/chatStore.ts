@@ -23,6 +23,8 @@ interface ChatState {
   setMatchStatus: (status: MatchStatus) => void;
   addMessage: (message: Message) => void;
   setMessages: (messages: Message[]) => void;
+  isPartnerPresent: boolean;
+  setPartnerPresent: (present: boolean) => void;
   clearMatch: () => void;
 }
 
@@ -45,11 +47,15 @@ export const useChatStore = create<ChatState>((set) => ({
   })),
 
   setMessages: (messages) => set({ messages }),
+  
+  isPartnerPresent: true,
+  setPartnerPresent: (present) => set({ isPartnerPresent: present }),
 
   clearMatch: () => set({ 
     matchId: null, 
     partnerId: null, 
     matchStatus: MatchStatus.Ended, 
-    messages: [] 
+    messages: [],
+    isPartnerPresent: true
   }),
 }));

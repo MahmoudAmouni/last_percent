@@ -45,12 +45,23 @@ class SignalRService {
     if (!this.connection) return;
 
     this.connection.on('MatchFound', (data: { matchId: number }) => {
-      console.log('Match Found!', data);
+      console.log('Match Found! Data:', data);
       useChatStore.getState().setMatch(data.matchId, 0); 
     });
 
-    this.connection.on('MessageReceived', (message: any) => {
-      useChatStore.getState().addMessage(message);
+    this.connection.on('MessageReceived', (data: any) => {
+      useChatStore.getState().addMessage({
+        id: data.messageId,
+        matchId: data.matchId,
+        senderId: data.senderId,
+        content: data.content,
+        sentAt: data.sentAt
+      });
+    });
+
+    this.connection.on('PartnerLeft', (data: { matchId: number }) => {
+      console.log('Partner left the match:', data.matchId);
+      useChatStore.getState().setPartnerPresent(false);
     });
 
     this.connection.onreconnecting((error) => {
