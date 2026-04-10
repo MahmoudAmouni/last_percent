@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderBottomWidth: 3,
     borderColor: 'rgba(255, 77, 77, 0.2)',
-    // shadow properties for cross-platform support
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,

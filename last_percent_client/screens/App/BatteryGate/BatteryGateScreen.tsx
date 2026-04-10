@@ -7,27 +7,24 @@ import {
   Platform 
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import Animated, { 
-  useSharedValue, 
-  useAnimatedStyle, 
-  withRepeat, 
-  withTiming, 
-  withSequence,
-  FadeInDown,
-  FadeInUp
-} from 'react-native-reanimated';
-
+import { useSharedValue, withRepeat, withTiming, withSequence } from 'react-native-reanimated';
 import { useStartSession } from '@/hooks/useSession';
+import { useSuspensionStore } from '@/store/suspensionStore';
+import { BatteryHeader } from '@/components/BatteryGate/BatteryHeader';
+import { BatteryVisual } from '@/components/BatteryGate/BatteryVisual';
+import { StatusCard } from '@/components/BatteryGate/StatusCard';
+import { ActionButton } from '@/components/BatteryGate/ActionButton';
 import { styles } from './BatteryGateScreen.styles';
 
 
 function BatteryGateScreen() {
-  const router = useRouter();
+  const { isSuspended, getRemainingSeconds, clearSuspension } = useSuspensionStore();
   
   const [mockBatteryLevel, setMockBatteryLevel] = useState(0.25); 
-  const isLocked = mockBatteryLevel > 0.20;
+  const [timeLeft, setTimeLeft] = useState(getRemainingSeconds());
+  
+  const isBanned = isSuspended() || timeLeft > 0;
+  const isLocked = mockBatteryLevel > 0.20 && !isBanned;
 
   const pulse = useSharedValue(1);
   const glowOpacity = useSharedValue(0.15);
@@ -52,18 +49,24 @@ function BatteryGateScreen() {
     );
   }, []);
 
-  const animatedBatteryStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: pulse.value }],
-  }));
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | undefined;
+    if (isBanned) {
+      interval = setInterval(() => {
+        const remaining = getRemainingSeconds();
+        setTimeLeft(remaining);
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isBanned]);
 
-  const animatedGlowStyle = useAnimatedStyle(() => ({
-    opacity: glowOpacity.value,
-  }));
 
   const startSessionMutation = useStartSession();
 
   const handleStartSession = () => {
-    if (!isLocked) {
+    if (!isLocked && !isBanned) {
       startSessionMutation.mutate({ 
         startingBatteryLevel: Math.round(mockBatteryLevel * 100) 
       });
@@ -74,91 +77,56 @@ function BatteryGateScreen() {
     setMockBatteryLevel(prev => prev === 0.25 ? 0.15 : 0.25);
   };
 
+
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={isLocked ? ['#100F0F', '#1A0B0B'] : ['#100F0F', '#2D0A0A']}
+        colors={isBanned ? ['#1A0B0B', '#2D0A0A'] : isLocked ? ['#100F0F', '#1A0B0B'] : ['#100F0F', '#2D0A0A']}
         style={styles.gradient}
       />
       
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.content}>
-          <Animated.View 
-            entering={FadeInDown.duration(800)}
-            style={styles.header}
-          >
-            <Text style={styles.title}>
-              {isLocked ? "ACCESS DENIED" : "SYSTEM READY"}
-            </Text>
-            <Text style={styles.subtitle}>
-              {isLocked ? "Your battery is too healthy" : "Welcome to the terminal stage"}
-            </Text>
-          </Animated.View>
+          <BatteryHeader 
+            isBanned={isBanned} 
+            isLocked={isLocked} 
+          />
 
-          <View style={styles.mainVisual}>
-            <Animated.View style={[styles.batteryWrapper, animatedBatteryStyle]}>
-              <Animated.View style={[styles.glowCircle, animatedGlowStyle]} />
-              <Ionicons 
-                name={isLocked ? "battery-full" : "battery-dead"} 
-                size={220} 
-                color={isLocked ? "rgba(255, 255, 255, 0.1)" : "#FF4D4D"} 
-              />
-              <Text style={styles.percentageText}>
-                {Math.round(mockBatteryLevel * 100)}%
-              </Text>
-            </Animated.View>
-          </View>
+          <BatteryVisual 
+            isBanned={isBanned}
+            isLocked={isLocked}
+            mockBatteryLevel={mockBatteryLevel}
+            timeLeft={timeLeft}
+            pulseValue={pulse}
+            glowOpacityValue={glowOpacity}
+          />
 
-          <Animated.View 
-            entering={FadeInUp.delay(400).duration(800)}
-            style={styles.footer}
-          >
-            <View style={styles.statusCard}>
-              <Text style={styles.statusTitle}>
-                {isLocked ? "Wait for it..." : "Status: Optimal Failure"}
-              </Text>
-              <Text style={styles.statusDescription}>
-                {isLocked 
-                  ? "We only connect users in their last percent. Come back when you are below 20%." 
-                  : "Device state validated. You are now eligible to find a companion for the end."}
-              </Text>
-              
-              {isLocked && (
-                <View style={styles.progressContainer}>
-                  <View 
-                    style={[
-                      styles.progressBar, 
-                      { width: `${(1 - (mockBatteryLevel - 0.20) / 0.80) * 100}%` }
-                    ]} 
-                  />
-                </View>
-              )}
-            </View>
+          <View style={styles.footer}>
+            <StatusCard 
+              isBanned={isBanned} 
+              isLocked={isLocked} 
+            />
 
-            <TouchableOpacity 
-              disabled={isLocked || startSessionMutation.isPending}
+            <ActionButton 
+              isLocked={isLocked}
+              isBanned={isBanned}
+              isPending={startSessionMutation.isPending}
               onPress={handleStartSession}
-              style={[
-                styles.button, 
-                (isLocked || startSessionMutation.isPending) && styles.buttonDisabled
-              ]}
-              activeOpacity={0.8}
-            >
-              <Text style={[
-                styles.buttonText, 
-                (isLocked || startSessionMutation.isPending) && styles.buttonTextDisabled
-              ]}>
-                {startSessionMutation.isPending 
-                  ? "INITIATING..." 
-                  : isLocked ? "CHECKING SENSORS..." : "START SESSION"}
-              </Text>
-            </TouchableOpacity>
-          </Animated.View>
+            />
+          </View>
         </View>
 
-        <TouchableOpacity style={styles.debugToggle} onPress={toggleMock}>
-          <Text style={styles.debugToggleText}>DEBUG: TOGGLE STATE</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
+          <TouchableOpacity style={styles.debugToggle} onPress={toggleMock}>
+            <Text style={styles.debugToggleText}>DEBUG: Lvl</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.debugToggle} onPress={() => {
+            if (isBanned) clearSuspension();
+            else useSuspensionStore.getState().suspend(30);
+          }}>
+            <Text style={styles.debugToggleText}>DEBUG: Ban</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </View>
   );

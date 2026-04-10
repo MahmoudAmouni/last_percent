@@ -13,6 +13,7 @@ import { useChatStore } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useSessionStore } from '@/store/sessionStore';
 import { useStartSession } from '@/hooks/useSession';
+import { useSuspensionStore } from '@/store/suspensionStore';
 import { styles } from './ChatScreen.styles';
 
 import { ChatHeader } from '@/components/chat/ChatHeader';
@@ -35,6 +36,8 @@ export const ChatScreen = () => {
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef<FlatList>(null);
 
+  const { suspend } = useSuspensionStore();
+
   const handleSend = () => {
     if (inputText.trim() && !isSending && isPartnerPresent) {
       sendMessage(inputText.trim());
@@ -52,6 +55,10 @@ export const ChatScreen = () => {
 
   const handleBack = async () => {
     if (matchId) {
+      if (isPartnerPresent) {
+        suspend(30);
+      }
+      
       try {
         await leaveChat();
       } catch (err) {
