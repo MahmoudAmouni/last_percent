@@ -1,6 +1,7 @@
 using System.Text;
 using last_percent_server.Data;
 using last_percent_server.Services;
+using last_percent_server.WebSockets;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -53,7 +54,7 @@ public static class DependencyInjection
                 {
                     var accessToken = context.Request.Query["access_token"];
                     var path = context.HttpContext.Request.Path;
-                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/ws"))
                     {
                         context.Token = accessToken;
                     }
@@ -75,19 +76,19 @@ public static class DependencyInjection
             };
         });
 
-        services.AddSignalR();
-
         return services;
     }
 
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        services.AddSingleton<ISocketManager, SocketManager>();
+        services.AddSingleton<WebSocketHandler>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ISessionService, SessionService>();
         services.AddScoped<IQueueService, QueueService>();
         services.AddScoped<IMatchmakingService, MatchmakingService>();
         services.AddScoped<IChatService, ChatService>();
-        
+
         return services;
     }
 }
