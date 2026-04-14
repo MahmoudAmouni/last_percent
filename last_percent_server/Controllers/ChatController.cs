@@ -1,12 +1,11 @@
 using last_percent_server.Data;
 using last_percent_server.Models;
 using last_percent_server.Extensions;
-using last_percent_server.Hubs;
 using last_percent_server.Models.DTOs;
 using last_percent_server.Services;
+using last_percent_server.WebSockets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace last_percent_server.Controllers;
@@ -18,13 +17,13 @@ public class ChatController : ControllerBase
 {
     private readonly IChatService _chatService;
     private readonly AppDbContext _context;
-    private readonly IHubContext<MatchmakingHub> _hubContext;
+    private readonly ISocketManager _socketManager;
 
-    public ChatController(IChatService chatService, AppDbContext context, IHubContext<MatchmakingHub> hubContext)
+    public ChatController(IChatService chatService, AppDbContext context, ISocketManager socketManager)
     {
         _chatService = chatService;
         _context = context;
-        _hubContext = hubContext;
+        _socketManager = socketManager;
     }
 
     [HttpGet("{matchId}/messages")]
@@ -46,23 +45,17 @@ public class ChatController : ControllerBase
 
         var recipientId = match.User1Id == userId ? match.User2Id : match.User1Id;
 
-        if (MatchmakingHub.UserConnections.TryGetValue(recipientId, out var connectionId))
+        await _socketManager.SendAsync(recipientId, new
         {
-            await _hubContext.Clients.Client(connectionId).SendAsync("MessageReceived", new
-            {
-                messageId = message.Id,
-                matchId = message.MatchId,
-                senderId = message.SenderId,
-                content = message.Content,
-                sentAt = message.SentAt
-            });
-        }
-
-        return Ok(new
-        {
+            type = "MessageReceived",
             messageId = message.Id,
+            matchId = message.MatchId,
+            senderId = message.SenderId,
+            content = message.Content,
             sentAt = message.SentAt
         });
+
+        return Ok(new { messageId = message.Id, sentAt = message.SentAt });
     }
 
     [HttpPost("{matchId}/read")]
@@ -76,13 +69,7 @@ public class ChatController : ControllerBase
 
         var partnerId = match.User1Id == userId ? match.User2Id : match.User1Id;
 
-        if (MatchmakingHub.UserConnections.TryGetValue(partnerId, out var connectionId))
-        {
-            await _hubContext.Clients.Client(connectionId).SendAsync("MessagesRead", new 
-            { 
-                matchId = matchId 
-            });
-        }
+        await _socketManager.SendAsync(partnerId, new { type = "MessagesRead", matchId });
 
         return Ok();
     }
@@ -91,7 +78,7 @@ public class ChatController : ControllerBase
     public async Task<IActionResult> LeaveChat(int matchId)
     {
         var userId = this.GetUserId();
-        
+
         var match = await _context.Matches.FirstOrDefaultAsync(m => m.Id == matchId);
         if (match == null) return NotFound();
 
@@ -100,16 +87,8 @@ public class ChatController : ControllerBase
 
         var partnerId = match.User1Id == userId ? match.User2Id : match.User1Id;
 
-        
-        if (MatchmakingHub.UserConnections.TryGetValue(partnerId, out var connectionId))
-        {
-            await _hubContext.Clients.Client(connectionId).SendAsync("PartnerLeft", new 
-            { 
-                matchId = matchId 
-            });
-        }
+        await _socketManager.SendAsync(partnerId, new { type = "PartnerLeft", matchId });
 
-        
         var reason = match.User1Id == userId ? MatchEndedReason.User1Switched : MatchEndedReason.User2Switched;
         await _chatService.EndMatchAsync(matchId, userId, reason);
 
