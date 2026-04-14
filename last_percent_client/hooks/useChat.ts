@@ -1,13 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getMessages, sendMessage, markAsRead, leaveChat } from '@/api/chat';
-import { useChatStore } from '@/store/chatStore';
-import { useAuthStore } from '@/store/authStore';
+import { useChatContext } from '@/store/chatStore';
+import { useAuthContext } from '@/store/authStore';
 import { useEffect } from 'react';
 
 export const useChat = (matchId: number | null) => {
   const queryClient = useQueryClient();
-  const { user } = useAuthStore();
-  const { setMessages, addMessage } = useChatStore();
+  const { user } = useAuthContext();
+  const { setMessages, addMessage } = useChatContext();
 
   const { data: messages, isLoading, error } = useQuery({
     queryKey: ['messages', matchId],
@@ -16,7 +16,6 @@ export const useChat = (matchId: number | null) => {
     refetchOnWindowFocus: false,
   });
 
-  // Sync messages from Query to Zustand Store when they load
   useEffect(() => {
     if (messages) {
       setMessages(messages.map(m => ({
@@ -32,8 +31,6 @@ export const useChat = (matchId: number | null) => {
   const sendMutation = useMutation({
     mutationFn: (content: string) => sendMessage(matchId!, { content }),
     onSuccess: (data: any, content: string) => {
-      // Add the message to the store immediately after successful send
-      // since the server only broadcasts to the recipient
       addMessage({
         id: data.messageId,
         matchId: matchId!,

@@ -9,11 +9,11 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useChat } from '@/hooks/useChat';
-import { useChatStore } from '@/store/chatStore';
-import { useAuthStore } from '@/store/authStore';
-import { useSessionStore } from '@/store/sessionStore';
+import { useChatContext } from '@/store/chatStore';
+import { useAuthContext } from '@/store/authStore';
+import { useSessionContext } from '@/store/sessionStore';
 import { useStartSession } from '@/hooks/useSession';
-import { useSuspensionStore } from '@/store/suspensionStore';
+import { useSuspensionContext } from '@/store/suspensionStore';
 import { styles } from './ChatScreen.styles';
 
 import { ChatHeader } from '@/components/chat/ChatHeader';
@@ -23,20 +23,17 @@ import { ReconnectCard } from '@/components/chat/ReconnectCard';
 
 export const ChatScreen = () => {
   const router = useRouter();
-  const matchId = useChatStore((state) => state.matchId);
-  const isPartnerPresent = useChatStore((state) => state.isPartnerPresent);
-  const clearMatch = useChatStore((state) => state.clearMatch);
+  const { matchId, isPartnerPresent, clearMatch, messages } = useChatContext();
   
-  const { user } = useAuthStore();
-  const { batteryLevel } = useSessionStore();
+  const { user } = useAuthContext();
+  const { batteryLevel } = useSessionContext();
   const { sendMessage, isSending, leaveChat } = useChat(matchId);
   const startSessionMutation = useStartSession();
-  const messages = useChatStore((state) => state.messages);
   
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef<FlatList>(null);
 
-  const { suspend } = useSuspensionStore();
+  const { suspend } = useSuspensionContext();
 
   const handleSend = () => {
     if (inputText.trim() && !isSending && isPartnerPresent) {

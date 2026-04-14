@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { login, register } from '@/api/auth';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthContext } from '@/store/authStore';
 import { jwtDecode } from 'jwt-decode';
 import { LoginDto, RegisterDto } from '@/types';
 
@@ -11,7 +11,7 @@ interface DecodedToken {
 }
 
 export function useLogin() {
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const { setAuth } = useAuthContext();
 
   return useMutation({
     mutationFn: (data: LoginDto) => login(data),
@@ -36,7 +36,7 @@ export function useLogin() {
 }
 
 export function useRegister() {
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const { setAuth } = useAuthContext();
 
   return useMutation({
     mutationFn: (data: RegisterDto) => register(data),
