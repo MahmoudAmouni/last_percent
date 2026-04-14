@@ -1,6 +1,6 @@
 using last_percent_server.Data;
 using last_percent_server.Extensions;
-using last_percent_server.Hubs;
+using last_percent_server.WebSockets;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+app.UseWebSockets();
 app.UseExceptionHandler();
 
 app.UseStatusCodePages(async context =>
@@ -40,7 +41,25 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<MatchmakingHub>("/hubs/matchmaking");
+
+app.Map("/ws", async context =>
+{
+    if (!context.WebSockets.IsWebSocketRequest)
+    {
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        return;
+    }
+
+    if (!context.User.Identity?.IsAuthenticated ?? true)
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return;
+    }
+
+    var socket = await context.WebSockets.AcceptWebSocketAsync();
+    var handler = context.RequestServices.GetRequiredService<WebSocketHandler>();
+    await handler.HandleAsync(context, socket);
+});
 
 app.MapGet("/", () => Results.Ok(new { message = "Welcome to the Last Percent API!", status = "running" }));
 
