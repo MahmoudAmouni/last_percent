@@ -32,7 +32,7 @@ const initialState: ChatState = {
   partnerId: null,
   matchStatus: MatchStatus.Ended,
   messages: [],
-  isPartnerPresent: true,
+  isPartnerPresent: false,
 };
 
 function chatReducer(state: ChatState, action: ChatAction): ChatState {

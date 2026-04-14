@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, ReactNode, useCallback } from 'react';
 import { storage } from './utils/storage';
 
 const STORAGE_KEY = 'suspension-storage';
@@ -8,7 +8,13 @@ async function readPersistedSuspension(): Promise<string | null> {
     const raw = await storage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    return parsed?.state?.suspendedUntil ?? null;
+    const suspendedUntil = parsed?.state?.suspendedUntil ?? null;
+    
+    if (suspendedUntil) {
+      const isExpired = new Date(suspendedUntil).getTime() <= Date.now();
+      if (isExpired) return null;
+    }
+    return suspendedUntil;
   } catch {
     return null;
   }
@@ -29,6 +35,7 @@ interface SuspensionState {
 
 interface SuspensionContextValue {
   suspendedUntil: string | null;
+  hydrated: boolean;
   suspend: (minutes: number) => void;
   clearSuspension: () => void;
   getRemainingSeconds: () => number;
@@ -74,19 +81,37 @@ export function SuspensionProvider({ children }: { children: ReactNode }) {
     writePersistedSuspension(state.suspendedUntil);
   }, [state.suspendedUntil, state.hydrated]);
 
-  const getRemainingSeconds = (): number => {
+  // Clean up expired suspension automatically
+  useEffect(() => {
+    if (!state.suspendedUntil) return;
+
+    const until = new Date(state.suspendedUntil).getTime();
+    const now = Date.now();
+    const diff = until - now;
+
+    if (diff <= 0) {
+      dispatch({ type: 'CLEAR_SUSPENSION' });
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      dispatch({ type: 'CLEAR_SUSPENSION' });
+    }, diff);
+
+    return () => clearTimeout(timer);
+  }, [state.suspendedUntil]);
+
+  const getRemainingSeconds = useCallback((): number => {
     if (!state.suspendedUntil) return 0;
     const now = Date.now();
     const until = new Date(state.suspendedUntil).getTime();
-    const diff = Math.max(0, Math.floor((until - now) / 1000));
-    
-    if (diff === 0 && state.suspendedUntil !== null) {
-      dispatch({ type: 'CLEAR_SUSPENSION' });
-    }
-    return diff;
-  };
+    return Math.max(0, Math.floor((until - now) / 1000));
+  }, [state.suspendedUntil]);
 
-  const isSuspended = (): boolean => getRemainingSeconds() > 0;
+  const isSuspended = useCallback((): boolean => {
+    if (!state.hydrated) return false;
+    return getRemainingSeconds() > 0;
+  }, [state.hydrated, getRemainingSeconds]);
 
   const suspend = (minutes: number): void => {
     const until = new Date(Date.now() + minutes * 60 * 1000).toISOString();
@@ -99,6 +124,7 @@ export function SuspensionProvider({ children }: { children: ReactNode }) {
 
   const value: SuspensionContextValue = {
     suspendedUntil: state.suspendedUntil,
+    hydrated: state.hydrated,
     suspend,
     clearSuspension,
     getRemainingSeconds,

@@ -18,10 +18,12 @@ import { styles } from './BatteryGateScreen.styles';
 
 
 function BatteryGateScreen() {
-  const { isSuspended, getRemainingSeconds, clearSuspension, suspend } = useSuspensionContext();
+  const { isSuspended, getRemainingSeconds, clearSuspension, suspend, hydrated } = useSuspensionContext();
   
   const [mockBatteryLevel, setMockBatteryLevel] = useState(0.25); 
   const [timeLeft, setTimeLeft] = useState(getRemainingSeconds());
+
+  if (!hydrated) return null;
   
   const isBanned = isSuspended() || timeLeft > 0;
   const isLocked = mockBatteryLevel > 0.20 && !isBanned;

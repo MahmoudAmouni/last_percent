@@ -13,7 +13,8 @@ import { AuthProvider, useAuthContext } from '@/store/authStore';
 import { ChatProvider, useChatContext } from '@/store/chatStore';
 import { SessionProvider } from '@/store/sessionStore';
 import { SuspensionProvider } from '@/store/suspensionStore';
-import { signalRService } from '@/services/signalR';
+import { websocketService } from '@/services/websocketService';
+import { useWebSocketEvents } from '@/hooks/useWebSocket';
 import { useRouter, useSegments } from 'expo-router';
 
 export const unstable_settings = {
@@ -22,10 +23,12 @@ export const unstable_settings = {
 
 function AppNavigator() {
   const colorScheme = useColorScheme();
-  const { isAuthenticated, initializeAuth } = useAuthContext();
+  const { isAuthenticated, initializeAuth, token } = useAuthContext();
   const { matchStatus } = useChatContext();
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
+
+  useWebSocketEvents();
 
   useEffect(() => {
     const init = async () => {
@@ -36,12 +39,12 @@ function AppNavigator() {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      signalRService.startConnection();
+    if (isAuthenticated && token) {
+      websocketService.connect(token);
     } else {
-      signalRService.stopConnection();
+      websocketService.disconnect();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, token]);
 
   const segments = useSegments();
 
