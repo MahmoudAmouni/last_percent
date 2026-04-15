@@ -39,4 +39,7 @@ public class User
 
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    [Column("suspended_until")]
+    public DateTime? SuspendedUntil { get; set; }
 }

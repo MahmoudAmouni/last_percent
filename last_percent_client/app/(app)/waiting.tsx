@@ -5,15 +5,15 @@ import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useJoinQueue, useLeaveQueue } from '@/hooks/useQueue';
-import { useSessionStore } from '@/store/sessionStore';
-import { useChatStore, MatchStatus } from '@/store/chatStore';
+import { useSessionContext } from '@/store/sessionStore';
+import { useChatContext, MatchStatus } from '@/store/chatStore';
 
 export default function WaitingScreen() {
   const router = useRouter();
   const joinQueueMutation = useJoinQueue();
   const leaveQueueMutation = useLeaveQueue();
-  const batteryLevel = useSessionStore((state) => state.batteryLevel);
-  const { matchStatus } = useChatStore();
+  const { batteryLevel } = useSessionContext();
+  const { matchStatus } = useChatContext();
 
   useEffect(() => {
     if (batteryLevel !== null) {

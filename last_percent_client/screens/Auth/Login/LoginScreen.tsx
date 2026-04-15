@@ -21,7 +21,6 @@ import AuthButton from '@/components/Welcome/AuthButton/AuthButton';
 import BatteryIcon from '@/components/Welcome/BatteryIcon/BatteryIcon';
 import FormInput from '../../../components/Login/FormInput/FormInput';
 import { styles } from './LoginScreen.styles';
-import { useAuthStore } from '@/store/authStore';
 import { useLogin } from '@/hooks/useAuth';
 
 function LoginScreen() {

@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { startSession, getActiveSession, endSession, StartSessionDto } from '@/api/session';
-import { useSessionStore } from '@/store/sessionStore';
+import { useSessionContext } from '@/store/sessionStore';
 import { useRouter } from 'expo-router';
 
 export function useStartSession() {
-  const setSession = useSessionStore((state) => state.setSession);
+  const { setSession } = useSessionContext();
   const router = useRouter();
 
   return useMutation({
@@ -20,8 +20,8 @@ export function useStartSession() {
 }
 
 export function useActiveSession() {
-  const setSession = useSessionStore((state) => state.setSession);
-  const clearSession = useSessionStore((state) => state.clearSession);
+  const { setSession } = useSessionContext();
+  const { clearSession } = useSessionContext();
 
   return useQuery({
     queryKey: ['activeSession'],
@@ -32,7 +32,7 @@ export function useActiveSession() {
 }
 
 export function useEndSession() {
-  const clearSession = useSessionStore((state) => state.clearSession);
+  const { clearSession } = useSessionContext();
 
   return useMutation({
     mutationFn: (batteryLevel: number) => endSession(batteryLevel),

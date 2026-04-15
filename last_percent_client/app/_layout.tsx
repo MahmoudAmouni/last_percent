@@ -9,21 +9,26 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useAuthStore } from '@/store/authStore';
-import { signalRService } from '@/services/signalR';
-import { useChatStore, MatchStatus } from '@/store/chatStore';
+import { AuthProvider, useAuthContext } from '@/store/authStore';
+import { ChatProvider, useChatContext } from '@/store/chatStore';
+import { SessionProvider } from '@/store/sessionStore';
+import { SuspensionProvider } from '@/store/suspensionStore';
+import { websocketService } from '@/services/websocketService';
+import { useWebSocketEvents } from '@/hooks/useWebSocket';
 import { useRouter, useSegments } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(auth)',
 };
 
-export default function RootLayout() {
+function AppNavigator() {
   const colorScheme = useColorScheme();
-  const { isAuthenticated, initializeAuth } = useAuthStore();
-  const { matchStatus } = useChatStore();
+  const { isAuthenticated, initializeAuth, token } = useAuthContext();
+  const { matchStatus } = useChatContext();
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
+
+  useWebSocketEvents();
 
   useEffect(() => {
     const init = async () => {
@@ -34,12 +39,12 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      signalRService.startConnection();
+    if (isAuthenticated && token) {
+      websocketService.connect(token);
     } else {
-      signalRService.stopConnection();
+      websocketService.disconnect();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, token]);
 
   const segments = useSegments();
 
@@ -58,16 +63,30 @@ export default function RootLayout() {
   if (!isLoaded) return null;
 
   return (
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <View style={styles.webContainer}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(app)" />
+        </Stack>
+        <StatusBar style="auto" />
+      </View>
+    </ThemeProvider>
+  );
+}
+
+export default function RootLayout() {
+  return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <View style={styles.webContainer}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen name="(app)" />
-          </Stack>
-          <StatusBar style="auto" />
-        </View>
-      </ThemeProvider>
+      <AuthProvider>
+        <ChatProvider>
+          <SessionProvider>
+            <SuspensionProvider>
+              <AppNavigator />
+            </SuspensionProvider>
+          </SessionProvider>
+        </ChatProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

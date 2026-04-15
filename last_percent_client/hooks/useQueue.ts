@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { joinQueue, leaveQueue, getQueueStatus, JoinQueueDto } from '@/api/queue';
-import { useChatStore, MatchStatus } from '@/store/chatStore';
+import { useChatContext, MatchStatus } from '@/store/chatStore';
 
 export function useJoinQueue() {
-  const setMatchStatus = useChatStore((state) => state.setMatchStatus);
+  const { setMatchStatus } = useChatContext();
 
   return useMutation({
     mutationFn: (data: JoinQueueDto) => joinQueue(data),
@@ -17,7 +17,7 @@ export function useJoinQueue() {
 }
 
 export function useLeaveQueue() {
-  const clearMatch = useChatStore((state) => state.clearMatch);
+  const { clearMatch } = useChatContext();
 
   return useMutation({
     mutationFn: () => leaveQueue(),

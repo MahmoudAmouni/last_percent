@@ -9,7 +9,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSharedValue, withRepeat, withTiming, withSequence } from 'react-native-reanimated';
 import { useStartSession } from '@/hooks/useSession';
-import { useSuspensionStore } from '@/store/suspensionStore';
+import { useSuspensionContext } from '@/store/suspensionStore';
 import { BatteryHeader } from '@/components/BatteryGate/BatteryHeader';
 import { BatteryVisual } from '@/components/BatteryGate/BatteryVisual';
 import { StatusCard } from '@/components/BatteryGate/StatusCard';
@@ -18,10 +18,12 @@ import { styles } from './BatteryGateScreen.styles';
 
 
 function BatteryGateScreen() {
-  const { isSuspended, getRemainingSeconds, clearSuspension } = useSuspensionStore();
+  const { isSuspended, getRemainingSeconds, clearSuspension, suspend, hydrated } = useSuspensionContext();
   
   const [mockBatteryLevel, setMockBatteryLevel] = useState(0.25); 
   const [timeLeft, setTimeLeft] = useState(getRemainingSeconds());
+
+  if (!hydrated) return null;
   
   const isBanned = isSuspended() || timeLeft > 0;
   const isLocked = mockBatteryLevel > 0.20 && !isBanned;
@@ -122,7 +124,7 @@ function BatteryGateScreen() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.debugToggle} onPress={() => {
             if (isBanned) clearSuspension();
-            else useSuspensionStore.getState().suspend(30);
+            else suspend(30);
           }}>
             <Text style={styles.debugToggleText}>DEBUG: Ban</Text>
           </TouchableOpacity>
