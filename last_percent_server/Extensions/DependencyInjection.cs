@@ -88,6 +88,7 @@ public static class DependencyInjection
         services.AddScoped<IQueueService, QueueService>();
         services.AddScoped<IMatchmakingService, MatchmakingService>();
         services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<ISuspensionService, SuspensionService>();
 
         return services;
     }
