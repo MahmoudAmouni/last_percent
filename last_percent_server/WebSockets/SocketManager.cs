@@ -19,6 +19,11 @@ public class SocketManager : ISocketManager
         _sockets.TryRemove(userId, out _);
     }
 
+    public bool IsConnected(int userId)
+    {
+        return _sockets.TryGetValue(userId, out var socket) && socket.State == WebSocketState.Open;
+    }
+
     public async Task SendAsync(int userId, object payload)
     {
         if (!_sockets.TryGetValue(userId, out var socket)) return;
