@@ -1,32 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode, useCallback } from 'react';
-import { storage } from './utils/storage';
-
-const STORAGE_KEY = 'suspension-storage';
-
-async function readPersistedSuspension(): Promise<string | null> {
-  try {
-    const raw = await storage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    const suspendedUntil = parsed?.state?.suspendedUntil ?? null;
-    
-    if (suspendedUntil) {
-      const isExpired = new Date(suspendedUntil).getTime() <= Date.now();
-      if (isExpired) return null;
-    }
-    return suspendedUntil;
-  } catch {
-    return null;
-  }
-}
-
-async function writePersistedSuspension(suspendedUntil: string | null): Promise<void> {
-  try {
-    const payload = JSON.stringify({ state: { suspendedUntil }, version: 0 });
-    await storage.setItem(STORAGE_KEY, payload);
-  } catch {
-  }
-}
+import { getSuspensionStatus } from '@/api/suspension';
+import { useAuthContext } from './authStore';
 
 interface SuspensionState {
   suspendedUntil: string | null;
@@ -69,19 +43,24 @@ const SuspensionContext = createContext<SuspensionContextValue | null>(null);
 
 export function SuspensionProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(suspensionReducer, initialState);
+  const { isAuthenticated } = useAuthContext();
 
   useEffect(() => {
-    readPersistedSuspension().then((suspendedUntil) => {
-      dispatch({ type: 'HYDRATE', suspendedUntil });
-    });
-  }, []);
+    if (!isAuthenticated) {
+      dispatch({ type: 'HYDRATE', suspendedUntil: null });
+      return;
+    }
 
-  useEffect(() => {
-    if (!state.hydrated) return;
-    writePersistedSuspension(state.suspendedUntil);
-  }, [state.suspendedUntil, state.hydrated]);
+    getSuspensionStatus()
+      .then((res) => {
+        dispatch({ type: 'HYDRATE', suspendedUntil: res.suspendedUntil });
+      })
+      .catch((err) => {
+        console.error('Failed to get suspension status:', err);
+        dispatch({ type: 'HYDRATE', suspendedUntil: null });
+      });
+  }, [isAuthenticated]);
 
-  // Clean up expired suspension automatically
   useEffect(() => {
     if (!state.suspendedUntil) return;
 
