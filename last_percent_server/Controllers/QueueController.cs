@@ -15,21 +15,29 @@ public class QueueController : ControllerBase
     private readonly IQueueService _queueService;
     private readonly IMatchmakingService _matchmakingService;
     private readonly ISocketManager _socketManager;
+    private readonly ISuspensionService _suspensionService;
 
     public QueueController(
         IQueueService queueService,
         IMatchmakingService matchmakingService,
-        ISocketManager socketManager)
+        ISocketManager socketManager,
+        ISuspensionService suspensionService)
     {
         _queueService = queueService;
         _matchmakingService = matchmakingService;
         _socketManager = socketManager;
+        _suspensionService = suspensionService;
     }
 
     [HttpPost("join")]
     public async Task<IActionResult> JoinQueue([FromBody] JoinQueueDto joinQueueDto)
     {
         var userId = this.GetUserId();
+
+        if (await _suspensionService.IsUserSuspendedAsync(userId))
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new { message = "You are currently suspended." });
+        }
         await _queueService.JoinQueueAsync(userId, joinQueueDto.BatteryLevel);
 
         var matchResult = await _matchmakingService.TryMatchAsync(userId);
