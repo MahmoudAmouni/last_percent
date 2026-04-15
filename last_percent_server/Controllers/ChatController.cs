@@ -18,12 +18,14 @@ public class ChatController : ControllerBase
     private readonly IChatService _chatService;
     private readonly AppDbContext _context;
     private readonly ISocketManager _socketManager;
+    private readonly ISuspensionService _suspensionService;
 
-    public ChatController(IChatService chatService, AppDbContext context, ISocketManager socketManager)
+    public ChatController(IChatService chatService, AppDbContext context, ISocketManager socketManager, ISuspensionService suspensionService)
     {
         _chatService = chatService;
         _context = context;
         _socketManager = socketManager;
+        _suspensionService = suspensionService;
     }
 
     [HttpGet("{matchId}/messages")]
@@ -90,6 +92,12 @@ public class ChatController : ControllerBase
         await _socketManager.SendAsync(partnerId, new { type = "PartnerLeft", matchId });
 
         var reason = match.User1Id == userId ? MatchEndedReason.User1Switched : MatchEndedReason.User2Switched;
+        
+        if (match.EndedAt == null && _socketManager.IsConnected(partnerId))
+        {
+            await _suspensionService.SuspendUserAsync(userId, 30);
+        }
+
         await _chatService.EndMatchAsync(matchId, userId, reason);
 
         return Ok();
