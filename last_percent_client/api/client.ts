@@ -1,9 +1,10 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
+import { Config } from '@/constants/Config';
 
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:5249/api',
+  baseURL: Config.BASE_URL,
   timeout: 10000,
 });
 

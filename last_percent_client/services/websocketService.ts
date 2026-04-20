@@ -1,4 +1,4 @@
-const WS_URL = 'ws://localhost:5249/ws';
+import { Config } from '@/constants/Config';
 
 type EventType = 'MatchFound' | 'MessageReceived' | 'PartnerLeft' | 'MessagesRead';
 type EventPayload = Record<string, unknown>;
@@ -47,7 +47,7 @@ class WebSocketService {
   private openSocket(): void {
     if (!this.token) return;
 
-    const url = `${WS_URL}?access_token=${this.token}`;
+    const url = `${Config.WS_URL}?access_token=${this.token}`;
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
