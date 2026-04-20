@@ -41,11 +41,6 @@ export const StatusCard: React.FC<StatusCardProps> = ({ isBanned, isLocked }) =>
               : "Signature verified. Life support synchronized. Terminal session ready for initialization."}
         </Text>
 
-        <View style={styles.footerMeta}>
-          <Text style={styles.metaItem}>ENCRYPTION: AES-256</Text>
-          <Text style={styles.metaItem}>REGION: GLOBAL</Text>
-          <Text style={styles.metaItem}>LATENCY: 24MS</Text>
-        </View>
       </View>
     </View>
   );
