@@ -38,7 +38,7 @@ export const createStyles = (colors: any) => StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    marginTop: -20, // Move upwards
+    marginTop: -20,
   },
   title: {
     fontSize: 32,
@@ -68,13 +68,13 @@ export const createStyles = (colors: any) => StyleSheet.create({
     fontWeight: '600',
   },
   loginButton: {
-    marginBottom: 20,
+    marginBottom: 10, // Reduced bottom margin
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 30,
+    paddingVertical: 10, // Reduced vertical padding
   },
   footerText: {
     color: colors.textSecondary,

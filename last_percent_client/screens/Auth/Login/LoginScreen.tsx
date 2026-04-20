@@ -7,7 +7,8 @@ import {
   Platform, 
   TouchableWithoutFeedback, 
   Keyboard,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -69,66 +70,74 @@ function LoginScreen() {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.keyboardView}
           >
-            <View style={styles.content}>
-              <Animated.View 
-                entering={FadeIn.delay(200).duration(1000)}
-                style={styles.header}
-              >
-                <TouchableOpacity 
-                  onPress={() => router.back()}
-                  style={styles.backButton}
+            <ScrollView 
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ flexGrow: 1 }}
+            >
+              <View style={styles.content}>
+                <Animated.View 
+                  entering={FadeIn.delay(200).duration(1000)}
+                  style={styles.header}
                 >
-                  <Ionicons name="arrow-back" size={24} color={colors.text} />
-                </TouchableOpacity>
-              </Animated.View>
-              
-              <Animated.View 
-                entering={FadeInDown.delay(400).duration(800)}
-                style={styles.formContainer}
-              >
-                <Text style={styles.title}>Welcome Back</Text>
-                <Text style={styles.subtitle}>Log in to continue your session</Text>
+                  <TouchableOpacity 
+                    onPress={() => router.back()}
+                    style={styles.backButton}
+                  >
+                    <Ionicons name="arrow-back" size={24} color={colors.text} />
+                  </TouchableOpacity>
+                </Animated.View>
+                
+                <Animated.View 
+                  entering={FadeInDown.delay(400).duration(800)}
+                  style={styles.formContainer}
+                >
+                  <Text style={styles.title}>Welcome Back</Text>
+                  <Text style={styles.subtitle}>Log in to continue your session</Text>
 
-                <FormInput
-                  label="Email Address"
-                  value={email}
-                  onChangeText={setEmail}
-                  placeholder="name@example.com"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
+                  <FormInput
+                    label="Email Address"
+                    value={email}
+                    onChangeText={setEmail}
+                    placeholder="name@example.com"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                  />
 
-                <FormInput
-                  label="Password"
-                  value={password}
-                  onChangeText={setPassword}
-                  placeholder="••••••••"
-                  secureTextEntry
-                />
+                  <FormInput
+                    label="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="••••••••"
+                    secureTextEntry
+                  />
 
-                {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                  {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-                <TouchableOpacity style={styles.forgotPassword}>
-                  <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-                </TouchableOpacity>
+                  <TouchableOpacity style={styles.forgotPassword}>
+                    <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+                  </TouchableOpacity>
 
-                <AuthButton
-                  title={loginMutation.isPending ? "LOGGING IN..." : "LOGIN"}
-                  onPress={handleLogin}
-                  style={styles.loginButton}
-                />
-              </Animated.View>
+                  <AuthButton
+                    title={loginMutation.isPending ? "LOGGING IN..." : "LOGIN"}
+                    onPress={handleLogin}
+                    style={styles.loginButton}
+                  />
 
-              <Animated.View 
-                entering={FadeInDown.delay(600).duration(800)}
-                style={styles.footer}
-              >
-                <Text style={styles.footerText}>Don't have an account?</Text>
-                <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
-                  <Text style={styles.registerText}> Create Account</Text>
-                </TouchableOpacity>
-              </Animated.View>
-            </View>
+                  <Animated.View 
+                    entering={FadeInDown.delay(600).duration(800)}
+                    style={styles.footer}
+                  >
+                    <Text style={styles.footerText}>Don't have an account?</Text>
+                    <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
+                      <Text style={styles.registerText}> Create Account</Text>
+                    </TouchableOpacity>
+                  </Animated.View>
+                </Animated.View>
+                
+                {/* Extra space */}
+                <View style={{ height: 100 }} />
+              </View>
+            </ScrollView>
           </KeyboardAvoidingView>
         </SafeAreaView>
       </View>
