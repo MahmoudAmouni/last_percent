@@ -16,7 +16,7 @@ export const createStyles = (colors: any) => StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     justifyContent: 'space-between',
-    paddingBottom: Platform.OS === 'ios' ? 40 : 20,
+    paddingBottom: Platform.OS === 'ios' ? 80 : 60,
     paddingTop: 80,
   },
   brandContainer: {
