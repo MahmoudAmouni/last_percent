@@ -11,6 +11,7 @@ export function useWebSocketEvents() {
       const matchId = payload.matchId as number;
       const partnerId = payload.partnerId as number;
       setMatch(matchId, partnerId);
+      setPartnerPresent(true);
     };
 
     const handleMessageReceived = (payload: Record<string, unknown>) => {
