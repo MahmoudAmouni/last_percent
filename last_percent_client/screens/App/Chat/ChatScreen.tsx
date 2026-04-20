@@ -52,9 +52,6 @@ export const ChatScreen = () => {
 
   const handleBack = async () => {
     if (matchId) {
-      if (isPartnerPresent) {
-        suspend(30);
-      }
       
       try {
         await leaveChat();

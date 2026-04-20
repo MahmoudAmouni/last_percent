@@ -53,6 +53,7 @@ export function SuspensionProvider({ children }: { children: ReactNode }) {
 
     getSuspensionStatus()
       .then((res) => {
+        console.log('[SuspensionStore] API Response:', res);
         dispatch({ type: 'HYDRATE', suspendedUntil: res.suspendedUntil });
       })
       .catch((err) => {
@@ -64,7 +65,8 @@ export function SuspensionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!state.suspendedUntil) return;
 
-    const until = new Date(state.suspendedUntil).getTime();
+    const dateStr = state.suspendedUntil.endsWith('Z') ? state.suspendedUntil : `${state.suspendedUntil}Z`;
+    const until = new Date(dateStr).getTime();
     const now = Date.now();
     const diff = until - now;
 
@@ -82,8 +84,10 @@ export function SuspensionProvider({ children }: { children: ReactNode }) {
 
   const getRemainingSeconds = useCallback((): number => {
     if (!state.suspendedUntil) return 0;
+    const dateStr = state.suspendedUntil.endsWith('Z') ? state.suspendedUntil : `${state.suspendedUntil}Z`;
     const now = Date.now();
-    const until = new Date(state.suspendedUntil).getTime();
+    const until = new Date(dateStr).getTime();
+    console.log('[SuspensionStore] now:', now, 'until:', until, 'suspendedUntil string:', state.suspendedUntil);
     return Math.max(0, Math.floor((until - now) / 1000));
   }, [state.suspendedUntil]);
 

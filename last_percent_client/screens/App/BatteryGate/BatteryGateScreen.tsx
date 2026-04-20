@@ -122,12 +122,6 @@ function BatteryGateScreen() {
           <TouchableOpacity style={styles.debugToggle} onPress={toggleMock}>
             <Text style={styles.debugToggleText}>DEBUG: Lvl</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.debugToggle} onPress={() => {
-            if (isBanned) clearSuspension();
-            else suspend(30);
-          }}>
-            <Text style={styles.debugToggleText}>DEBUG: Ban</Text>
-          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </View>
