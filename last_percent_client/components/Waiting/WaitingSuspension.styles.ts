@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -16,34 +16,34 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#FF4D4D',
+    color: colors.error,
     textAlign: 'center',
     marginBottom: 16,
   },
   description: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 40,
   },
   timerContainer: {
-    backgroundColor: 'rgba(255, 77, 77, 0.1)',
+    backgroundColor: `${colors.error}14`, // 0.08 opacity in hex is approx 14
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255, 77, 77, 0.2)',
+    borderColor: `${colors.error}26`, // 0.15 opacity in hex is approx 26
   },
   timerText: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#FF4D4D',
+    color: colors.error,
     fontVariant: ['tabular-nums'],
   },
   timerLabel: {
     fontSize: 12,
-    color: 'rgba(255, 77, 77, 0.5)',
+    color: `${colors.error}66`, // 0.4 opacity in hex is approx 66
     textAlign: 'center',
     marginTop: 4,
     textTransform: 'uppercase',

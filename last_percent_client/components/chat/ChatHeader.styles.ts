@@ -1,18 +1,18 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    borderBottomColor: colors.border,
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   headerTitle: {
-    color: '#FFF',
+    color: colors.text,
     fontSize: 18,
     fontWeight: '700',
   },
@@ -34,14 +34,14 @@ export const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.online,
     marginRight: 6,
   },
   statusDotOffline: {
-    backgroundColor: '#FF4D4D',
+    backgroundColor: colors.error,
   },
   statusText: {
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: colors.textSecondary,
     fontSize: 12,
   },
 });

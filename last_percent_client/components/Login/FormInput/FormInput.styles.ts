@@ -1,12 +1,12 @@
 import { StyleSheet, Platform } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     marginBottom: 20,
     width: '100%',
   },
   label: {
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '600',
     marginBottom: 8,
@@ -17,15 +17,16 @@ export const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     borderWidth: 1.5,
     height: 56,
     paddingHorizontal: 16,
+    borderColor: colors.border,
   },
   input: {
     flex: 1,
-    color: '#FFF',
+    color: colors.text,
     fontSize: 16,
     fontWeight: '500',
     fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
@@ -35,7 +36,7 @@ export const styles = StyleSheet.create({
     padding: 4,
   },
   errorText: {
-    color: '#FF4D4D',
+    color: colors.error,
     fontSize: 12,
     marginTop: 6,
     marginLeft: 4,

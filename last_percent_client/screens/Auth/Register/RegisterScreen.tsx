@@ -19,10 +19,14 @@ import Animated, {
 
 import AuthButton from '@/components/Welcome/AuthButton/AuthButton';
 import FormInput from '../../../components/Login/FormInput/FormInput';
-import { styles } from './RegisterScreen.styles';
+import { createStyles } from './RegisterScreen.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useRegister } from '@/hooks/useAuth';
 
 function RegisterScreen() {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const registerMutation = useRegister();
   
@@ -68,7 +72,7 @@ function RegisterScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <LinearGradient
-          colors={['#100F0F', '#1A0B0B', '#2D0A0A']}
+          colors={[colors.background, colors.surface, colors.background]}
           style={styles.gradient}
         />
         
@@ -86,7 +90,7 @@ function RegisterScreen() {
                   onPress={() => router.back()}
                   style={styles.backButton}
                 >
-                  <Ionicons name="arrow-back" size={24} color="#FFF" />
+                  <Ionicons name="arrow-back" size={24} color={colors.text} />
                 </TouchableOpacity>
               </Animated.View>
 

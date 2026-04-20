@@ -3,22 +3,25 @@ import {
   View, 
   Text, 
   SafeAreaView, 
-  TouchableOpacity, 
-  Platform 
+  TouchableOpacity 
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useSharedValue, withRepeat, withTiming, withSequence } from 'react-native-reanimated';
+import Animated, { useSharedValue, withRepeat, withTiming, withSequence, FadeIn } from 'react-native-reanimated';
 import { useStartSession } from '@/hooks/useSession';
 import { useSuspensionContext } from '@/store/suspensionStore';
 import { BatteryHeader } from '@/components/BatteryGate/BatteryHeader';
 import { BatteryVisual } from '@/components/BatteryGate/BatteryVisual';
 import { StatusCard } from '@/components/BatteryGate/StatusCard';
 import { ActionButton } from '@/components/BatteryGate/ActionButton';
-import { styles } from './BatteryGateScreen.styles';
-
+import { createStyles } from './BatteryGateScreen.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 function BatteryGateScreen() {
-  const { isSuspended, getRemainingSeconds, clearSuspension, suspend, hydrated } = useSuspensionContext();
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
+  
+  const { isSuspended, getRemainingSeconds, hydrated } = useSuspensionContext();
   
   const [mockBatteryLevel, setMockBatteryLevel] = useState(0.25); 
   const [timeLeft, setTimeLeft] = useState(getRemainingSeconds());
@@ -34,8 +37,8 @@ function BatteryGateScreen() {
   useEffect(() => {
     pulse.value = withRepeat(
       withSequence(
-        withTiming(1.1, { duration: 1500 }),
-        withTiming(1, { duration: 1500 })
+        withTiming(1.05, { duration: 2000 }),
+        withTiming(1, { duration: 2000 })
       ),
       -1,
       true
@@ -43,8 +46,8 @@ function BatteryGateScreen() {
 
     glowOpacity.value = withRepeat(
       withSequence(
-        withTiming(0.4, { duration: 1500 }),
-        withTiming(0.15, { duration: 1500 })
+        withTiming(0.3, { duration: 2000 }),
+        withTiming(0.1, { duration: 2000 })
       ),
       -1,
       true
@@ -64,7 +67,6 @@ function BatteryGateScreen() {
     };
   }, [isBanned]);
 
-
   const startSessionMutation = useStartSession();
 
   const handleStartSession = () => {
@@ -79,35 +81,34 @@ function BatteryGateScreen() {
     setMockBatteryLevel(prev => prev === 0.25 ? 0.15 : 0.25);
   };
 
+  const gradientColors = isBanned 
+    ? ['#120505', '#0F0F0F'] 
+    : [colors.background, colors.surface];
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={isBanned ? ['#1A0B0B', '#2D0A0A'] : isLocked ? ['#100F0F', '#1A0B0B'] : ['#100F0F', '#2D0A0A']}
-        style={styles.gradient}
-      />
+      <LinearGradient colors={gradientColors} style={styles.gradient} />
+      
+      {/* Decorative HUD Elements */}
+      <View style={styles.decorationCircle} />
       
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.content}>
-          <BatteryHeader 
-            isBanned={isBanned} 
-            isLocked={isLocked} 
-          />
+        <Animated.View entering={FadeIn.delay(200)} style={styles.content}>
+          <BatteryHeader isBanned={isBanned} isLocked={isLocked} />
 
-          <BatteryVisual 
-            isBanned={isBanned}
-            isLocked={isLocked}
-            mockBatteryLevel={mockBatteryLevel}
-            timeLeft={timeLeft}
-            pulseValue={pulse}
-            glowOpacityValue={glowOpacity}
-          />
+          <View style={styles.mainContent}>
+            <BatteryVisual 
+              isBanned={isBanned}
+              isLocked={isLocked}
+              mockBatteryLevel={mockBatteryLevel}
+              timeLeft={timeLeft}
+              pulseValue={pulse}
+              glowOpacityValue={glowOpacity}
+            />
+          </View>
 
           <View style={styles.footer}>
-            <StatusCard 
-              isBanned={isBanned} 
-              isLocked={isLocked} 
-            />
+            <StatusCard isBanned={isBanned} isLocked={isLocked} />
 
             <ActionButton 
               isLocked={isLocked}
@@ -116,13 +117,11 @@ function BatteryGateScreen() {
               onPress={handleStartSession}
             />
           </View>
-        </View>
+        </Animated.View>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
-          <TouchableOpacity style={styles.debugToggle} onPress={toggleMock}>
-            <Text style={styles.debugToggleText}>DEBUG: Lvl</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.debugToggle} onPress={toggleMock}>
+          <Text style={styles.debugToggleText}>EMULATE: {Math.round(mockBatteryLevel * 100)}%</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </View>
   );

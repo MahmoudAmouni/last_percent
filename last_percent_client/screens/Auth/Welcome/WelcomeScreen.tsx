@@ -21,9 +21,13 @@ import { useRouter } from 'expo-router';
 
 import BatteryIcon from '../../../components/Welcome/BatteryIcon/BatteryIcon';
 import AuthButton from '../../../components/Welcome/AuthButton/AuthButton';
-import { styles } from './WelcomeScreen.styles';
+import { createStyles } from './WelcomeScreen.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 const WelcomeScreen = () => {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const titleOpacity = useSharedValue(0);
   const subtitleOpacity = useSharedValue(0);
@@ -52,50 +56,43 @@ const WelcomeScreen = () => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <LinearGradient
-        colors={['#100F0F', '#1A0B0B', '#2D0A0A']}
+        colors={[colors.background, colors.surface, colors.background]}
         style={styles.gradient}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
       
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.content}>
           <Animated.View 
             entering={FadeIn.delay(300).duration(1000)}
-            style={styles.logoContainer}
+            style={styles.brandContainer}
           >
             <BatteryIcon />
+            <View style={{ marginTop: 20 }}>
+              <Animated.Text style={[styles.title, titleStyle]}>
+                Last Percent
+              </Animated.Text>
+              <Animated.Text style={[styles.subtitle, subtitleStyle]}>
+                Connect with strangers while your battery is dying.
+              </Animated.Text>
+            </View>
           </Animated.View>
-
-          <View style={styles.textContainer}>
-            <Animated.Text style={[styles.title, titleStyle]}>
-              Last Percent
-            </Animated.Text>
-            <Animated.Text style={[styles.subtitle, subtitleStyle]}>
-              Connect with strangers while your battery is dying.
-            </Animated.Text>
-          </View>
 
           <Animated.View 
             entering={FadeInDown.delay(1000).springify()}
-            style={styles.footer}
+            style={styles.buttonContainer}
           >
             <AuthButton 
               title="LOGIN" 
               variant="primary"
               onPress={() => router.push('/(auth)/login')} 
-              style={styles.button}
             />
             <AuthButton 
               title="CREATE ACCOUNT" 
               variant="secondary"
               onPress={() => router.push('/(auth)/register')} 
-              style={styles.button}
             />
-            
-            <Text style={styles.terms}>
-              By continuing, you agree to our Terms of Service.
-            </Text>
           </Animated.View>
         </View>
       </SafeAreaView>

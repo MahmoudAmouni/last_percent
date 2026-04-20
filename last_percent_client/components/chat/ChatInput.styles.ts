@@ -1,23 +1,23 @@
 import { StyleSheet, Platform } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     padding: 16,
     paddingBottom: Platform.OS === 'ios' ? 16 : 24,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: colors.background,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.05)',
+    borderTopColor: colors.border,
   },
   input: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: colors.surface,
     borderRadius: 24,
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 12,
-    color: '#FFF',
+    color: colors.text,
     fontSize: 16,
     maxHeight: 100,
   },
@@ -25,12 +25,12 @@ export const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#FF4D4D',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 12,
   },
   sendButtonDisabled: {
-    backgroundColor: 'rgba(255, 77, 77, 0.3)',
+    backgroundColor: `${colors.primary}4D`, // 0.3 opacity approx 4D
   },
 });

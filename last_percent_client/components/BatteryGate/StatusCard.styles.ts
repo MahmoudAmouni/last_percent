@@ -1,34 +1,49 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
-  statusCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 24,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    marginBottom: 32,
+export const createStyles = (colors: any) => StyleSheet.create({
+  container: {
+    width: '100%',
+    marginVertical: 10,
+  },
+  statusLine: {
+    height: 1,
+    backgroundColor: colors.border,
+    width: '100%',
+    marginBottom: 20,
+  },
+  contentWrapper: {
+    paddingHorizontal: 10,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
   },
   statusTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#FFF',
-    marginBottom: 8,
-    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '900',
+    color: colors.text,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    marginLeft: 10,
   },
   statusDescription: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.6)',
-    textAlign: 'center',
+    fontSize: 13,
+    color: colors.textSecondary,
     lineHeight: 20,
+    fontWeight: '500',
   },
-  suspendedCard: {
-    borderColor: '#FF4D4D',
-    borderWidth: 2,
-    backgroundColor: 'rgba(255, 77, 77, 0.05)',
+  footerMeta: {
+    flexDirection: 'row',
+    marginTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.05)',
+    paddingTop: 10,
   },
-  warningIconWrapper: {
-    marginBottom: 10,
-    alignItems: 'center',
+  metaItem: {
+    fontSize: 9,
+    color: 'rgba(255, 255, 255, 0.3)',
+    fontWeight: '700',
+    marginRight: 20,
   },
 });

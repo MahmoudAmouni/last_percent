@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   messageBubble: {
     maxWidth: '80%',
     padding: 12,
@@ -9,21 +9,26 @@ export const styles = StyleSheet.create({
   },
   myMessage: {
     alignSelf: 'flex-end',
-    backgroundColor: '#FF4D4D',
+    backgroundColor: colors.primary,
     borderBottomRightRadius: 4,
   },
   theirMessage: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: colors.surface,
     borderBottomLeftRadius: 4,
   },
-  messageText: {
-    color: '#FFF',
+  myMessageText: {
+    color: colors.background,
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  theirMessageText: {
+    color: colors.text,
     fontSize: 16,
     lineHeight: 22,
   },
   timeText: {
-    color: 'rgba(255, 255, 255, 0.4)',
+    color: colors.textSecondary,
     fontSize: 10,
     marginTop: 4,
     alignSelf: 'flex-end',

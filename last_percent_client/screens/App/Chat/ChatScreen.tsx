@@ -13,8 +13,9 @@ import { useChatContext } from '@/store/chatStore';
 import { useAuthContext } from '@/store/authStore';
 import { useSessionContext } from '@/store/sessionStore';
 import { useStartSession } from '@/hooks/useSession';
-import { useSuspensionContext } from '@/store/suspensionStore';
-import { styles } from './ChatScreen.styles';
+import { createStyles } from './ChatScreen.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 import { ChatHeader } from '@/components/chat/ChatHeader';
 import { MessageItem } from '@/components/chat/MessageItem';
@@ -22,6 +23,8 @@ import { ChatInput } from '@/components/chat/ChatInput';
 import { ReconnectCard } from '@/components/chat/ReconnectCard';
 
 export const ChatScreen = () => {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { matchId, isPartnerPresent, clearMatch, messages } = useChatContext();
   
@@ -32,8 +35,6 @@ export const ChatScreen = () => {
   
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef<FlatList>(null);
-
-  const { suspend } = useSuspensionContext();
 
   const handleSend = () => {
     if (inputText.trim() && !isSending && isPartnerPresent) {
@@ -78,7 +79,7 @@ export const ChatScreen = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#100F0F', '#1A0B0B', '#2D0A0A']}
+        colors={[colors.background, colors.surface, colors.background]}
         style={styles.gradient}
       />
       <SafeAreaView style={styles.safeArea}>

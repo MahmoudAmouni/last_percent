@@ -1,11 +1,9 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
-
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.background,
   },
   gradient: {
     position: 'absolute',
@@ -41,7 +39,7 @@ export const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
@@ -54,14 +52,14 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#FFF',
+    color: colors.text,
     letterSpacing: -0.5,
     marginBottom: 8,
     fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
   },
   subtitle: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: colors.textSecondary,
     marginBottom: 32,
     fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
   },
@@ -70,7 +68,7 @@ export const styles = StyleSheet.create({
     marginBottom: 32,
   },
   forgotPasswordText: {
-    color: '#FF4D4D',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -85,16 +83,16 @@ export const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   footerText: {
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: colors.textSecondary,
     fontSize: 14,
   },
   registerText: {
-    color: '#FF4D4D',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '700',
   },
   errorText: {
-    color: '#FF4D4D',
+    color: colors.error,
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 20,

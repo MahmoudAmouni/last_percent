@@ -1,23 +1,49 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   header: {
     alignItems: 'center',
-    marginTop: 20,
+    paddingVertical: 10,
+  },
+  badge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    marginBottom: 16,
+  },
+  badgeText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: colors.textSecondary,
+    letterSpacing: 1.5,
   },
   title: {
-    fontSize: 40,
+    fontSize: 32,
     fontWeight: '900',
-    color: '#FFF',
+    color: colors.text,
     letterSpacing: -1,
     textAlign: 'center',
-    fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
+    textTransform: 'uppercase',
   },
   subtitle: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.5)',
+    fontSize: 14,
+    color: colors.textSecondary,
     textAlign: 'center',
-    marginTop: 8,
-    fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
+    marginTop: 6,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+  },
+  accentLine: {
+    width: 40,
+    height: 4,
+    backgroundColor: colors.primary,
+    borderRadius: 2,
+    marginTop: 20,
+  },
+  accentLineBanned: {
+    backgroundColor: colors.error,
   },
 });

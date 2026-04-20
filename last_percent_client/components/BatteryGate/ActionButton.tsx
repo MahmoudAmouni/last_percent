@@ -1,7 +1,8 @@
 import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { styles } from './ActionButton.styles';
+import { createStyles } from './ActionButton.styles';
+import { useStyles } from '@/hooks/useStyles';
 
 interface ActionButtonProps {
   isLocked: boolean;
@@ -16,6 +17,8 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   isPending, 
   onPress 
 }) => {
+  const styles = useStyles(createStyles);
+  
   return (
     <Animated.View 
       entering={FadeInUp.delay(400).duration(800)}

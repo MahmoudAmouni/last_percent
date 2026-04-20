@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { styles } from './ChatInput.styles';
+import { createStyles } from './ChatInput.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 interface ChatInputProps {
   inputText: string;
@@ -18,12 +20,15 @@ export const ChatInput = ({
   isSending, 
   isPartnerPresent 
 }: ChatInputProps) => {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
         style={styles.input}
         placeholder="Keep the spirit alive..."
-        placeholderTextColor="rgba(255, 255, 255, 0.3)"
+        placeholderTextColor={colors.textSecondary}
         value={inputText}
         onChangeText={setInputText}
         multiline
@@ -36,7 +41,7 @@ export const ChatInput = ({
         ]}
         disabled={!inputText.trim() || isSending || !isPartnerPresent}
       >
-        <Ionicons name="send" size={20} color="#FFF" />
+        <Ionicons name="send" size={20} color={colors.background} />
       </TouchableOpacity>
     </View>
   );

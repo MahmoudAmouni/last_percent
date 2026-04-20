@@ -1,14 +1,14 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   reconnectCard: {
-    backgroundColor: '#1A0B0B',
+    backgroundColor: colors.surface,
     margin: 20,
     borderRadius: 20,
     padding: 24,
     borderWidth: 1,
     borderBottomWidth: 3,
-    borderColor: 'rgba(255, 77, 77, 0.2)',
+    borderColor: `${colors.primary}33`, // 0.2 opacity approx 33
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
@@ -24,13 +24,13 @@ export const styles = StyleSheet.create({
     marginRight: 8,
   },
   reconnectTitle: {
-    color: '#FF4D4D',
+    color: colors.primary,
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: -0.5,
   },
   reconnectSubtitle: {
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: colors.textSecondary,
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 24,
@@ -41,25 +41,25 @@ export const styles = StyleSheet.create({
   },
   primaryCardButton: {
     flex: 1,
-    backgroundColor: '#FF4D4D',
+    backgroundColor: colors.primary,
     paddingVertical: 14,
     borderRadius: 14,
     alignItems: 'center',
   },
   primaryCardButtonText: {
-    color: '#FFF',
+    color: colors.background,
     fontSize: 14,
     fontWeight: '700',
   },
   secondaryCardButton: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: colors.border,
     paddingVertical: 14,
     borderRadius: 14,
     alignItems: 'center',
   },
   secondaryCardButtonText: {
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: colors.textSecondary,
     fontSize: 14,
     fontWeight: '600',
   },

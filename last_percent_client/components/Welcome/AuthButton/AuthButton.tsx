@@ -2,11 +2,13 @@ import React from 'react';
 import { 
   TouchableOpacity, 
   Text, 
-  Platform 
+  Platform,
+  ViewStyle,
+  TextStyle
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { styles } from './AuthButton.styles';
-import { ViewStyle, TextStyle } from 'react-native';
+import { createStyles } from './AuthButton.styles';
+import { useStyles } from '@/hooks/useStyles';
 
 interface AuthButtonProps {
   title: string;
@@ -24,6 +26,9 @@ function AuthButton(props: AuthButtonProps) {
     style, 
     textStyle 
   } = props;
+  
+  const styles = useStyles(createStyles);
+  
   const handlePress = () => {
     if (Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -43,8 +48,8 @@ function AuthButton(props: AuthButtonProps) {
     >
       <Text
         style={[
-          styles.text,
-          variant === 'primary' ? styles.primaryText : styles.secondaryText,
+          styles.buttonText,
+          variant === 'primary' ? styles.primaryButtonText : styles.secondaryButtonText,
           textStyle,
         ]}
       >

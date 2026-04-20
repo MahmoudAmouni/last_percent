@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text } from 'react-native';
 import Animated, { SlideInRight, SlideInLeft } from 'react-native-reanimated';
-import { styles } from './MessageItem.styles';
+import { createStyles } from './MessageItem.styles';
+import { useStyles } from '@/hooks/useStyles';
 
 interface Message {
   id: number;
@@ -17,6 +18,7 @@ interface MessageItemProps {
 }
 
 export const MessageItem = ({ item, currentUserId }: MessageItemProps) => {
+  const styles = useStyles(createStyles);
   const isMe = item.senderId === currentUserId || item.senderId === 0;
 
   return (
@@ -27,7 +29,7 @@ export const MessageItem = ({ item, currentUserId }: MessageItemProps) => {
         isMe ? styles.myMessage : styles.theirMessage
       ]}
     >
-      <Text style={styles.messageText}>{item.content}</Text>
+      <Text style={isMe ? styles.myMessageText : styles.theirMessageText}>{item.content}</Text>
       <Text style={styles.timeText}>
         {new Date(item.sentAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
       </Text>
