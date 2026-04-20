@@ -18,7 +18,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import AuthButton from '@/components/Welcome/AuthButton/AuthButton';
-import BatteryIcon from '@/components/Welcome/BatteryIcon/BatteryIcon';
 import FormInput from '../../../components/Login/FormInput/FormInput';
 import { createStyles } from './LoginScreen.styles';
 import { useStyles } from '@/hooks/useStyles';
@@ -51,7 +50,7 @@ function LoginScreen() {
         },
         onError: (err: any) => {
           console.error('Login Mutation Error:', err);
-          setError(err?.response?.data?.message || 'Invalid email or password or backend unavailable');
+          setError(err?.response?.data?.message || 'Invalid email or password');
         }
       }
     );
@@ -81,7 +80,6 @@ function LoginScreen() {
                 >
                   <Ionicons name="arrow-back" size={24} color={colors.text} />
                 </TouchableOpacity>
-                <BatteryIcon />
               </Animated.View>
               
               <Animated.View 
