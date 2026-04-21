@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text } from 'react-native';
-import Animated, { SlideInRight, SlideInLeft } from 'react-native-reanimated';
+import { View, Text } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 import { createStyles } from './MessageItem.styles';
 import { useStyles } from '@/hooks/useStyles';
 
@@ -14,23 +14,30 @@ interface Message {
 
 interface MessageItemProps {
   item: Message;
-  currentUserId: number | undefined;
+  currentUserId: string | number | undefined;
 }
 
 export const MessageItem = ({ item, currentUserId }: MessageItemProps) => {
   const styles = useStyles(createStyles);
-  const isMe = item.senderId === currentUserId || item.senderId === 0;
+  const isMe = currentUserId !== undefined && String(item.senderId) === String(currentUserId);
 
   return (
     <Animated.View 
-      entering={isMe ? SlideInRight : SlideInLeft}
-      style={[
-        styles.messageBubble,
-        isMe ? styles.myMessage : styles.theirMessage
-      ]}
+      entering={FadeInUp.duration(400)}
+      style={styles.messageContainer}
     >
-      <Text style={isMe ? styles.myMessageText : styles.theirMessageText}>{item.content}</Text>
-      <Text style={styles.timeText}>
+      <View 
+        style={[
+          styles.messageBubble,
+          isMe ? styles.myMessage : styles.theirMessage
+        ]}
+      >
+        <Text style={isMe ? styles.myMessageText : styles.theirMessageText}>{item.content}</Text>
+      </View>
+      <Text style={[
+        styles.timeText,
+        isMe ? styles.myTimeText : styles.theirTimeText
+      ]}>
         {new Date(item.sentAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
       </Text>
     </Animated.View>
