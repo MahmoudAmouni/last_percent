@@ -1,11 +1,12 @@
-const API_URL = 'http://localhost:5249';
-// When using ngrok, replace the URL above with your ngrok URL:
-// const API_URL = 'https://your-ngrok-id.ngrok-free.app';
+import { Platform } from 'react-native';
 
-const isNgrok = API_URL.includes('ngrok');
+// const NGROK_URL = 'https://bidenticulate-unreproductive-georgette.ngrok-free.dev';
+const LOCAL_API_URL = 'http://localhost:5249';
+
+const API_URL = LOCAL_API_URL;
 
 export const Config = {
   API_URL,
   BASE_URL: `${API_URL}/api`,
-  WS_URL: `${API_URL.replace('http', 'ws')}/ws`,
+  WS_URL: `${API_URL.replace('http', 'ws').replace('https', 'wss')}/ws`,
 };
