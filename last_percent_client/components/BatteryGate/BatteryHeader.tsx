@@ -17,19 +17,15 @@ export const BatteryHeader: React.FC<BatteryHeaderProps> = ({ isBanned, isLocked
       entering={FadeInDown.duration(800)}
       style={styles.header}
     >
-      <View style={styles.badge}>
-        <Text style={styles.badgeText}>TERMINAL v1.0.4</Text>
-      </View>
-      
       <Text style={styles.title}>
-        {isBanned ? "RESTRICTED" : isLocked ? "UNAVAILABLE" : "OPERATIONAL"}
+        {isBanned ? "Just a moment" : isLocked ? "Not quite yet" : "Welcome back"}
       </Text>
       <Text style={styles.subtitle}>
         {isBanned 
-          ? "MATCH ABANDONMENT DETECTED" 
+          ? "You left the conversation a bit early. Take a breath while we reconnect you." 
           : isLocked 
-            ? "VOLTAGE THRESHOLD TOO HIGH" 
-            : "INITIALIZING TERMINAL STAGE"}
+            ? "Your journey starts when the power runs low. We'll be here when you're ready." 
+            : "The battery is low, but the night is young. Ready to find someone?"}
       </Text>
 
       <View style={[styles.accentLine, isBanned && styles.accentLineBanned]} />

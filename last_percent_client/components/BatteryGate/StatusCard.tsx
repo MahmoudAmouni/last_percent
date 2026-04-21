@@ -14,33 +14,50 @@ export const StatusCard: React.FC<StatusCardProps> = ({ isBanned, isLocked }) =>
   const styles = useStyles(createStyles);
   const { colors } = useTheme();
 
+  const getStatusContent = () => {
+    if (isBanned) {
+      return {
+        icon: "heart-half-outline",
+        title: "RESTING",
+        description: "Your previous connection ended abruptly. We're letting things cool down before your next match.",
+        color: colors.error
+      };
+    }
+    if (isLocked) {
+      return {
+        icon: "moon-outline",
+        title: "STAY TUNED",
+        description: "The best stories happen in the final moments. Use your phone naturally until the battery drops.",
+        color: colors.textSecondary
+      };
+    }
+    return {
+      icon: "sparkles-outline",
+      title: "ALL SET",
+      description: "You're in the magic zone. Start your session to find someone dying with you.",
+      color: colors.primary
+    };
+  };
+
+  const content = getStatusContent();
+
   return (
     <View style={styles.container}>
-      <View style={styles.statusLine} />
-
       <View style={styles.contentWrapper}>
         <View style={styles.headerRow}>
           <Ionicons 
-            name={isBanned ? "shield-outline" : isLocked ? "radio-outline" : "pulse-outline"} 
-            size={16} 
-            color={isBanned ? colors.error : isLocked ? colors.textSecondary : colors.primary} 
+            name={content.icon as any} 
+            size={20} 
+            color={content.color} 
           />
-          <Text style={[
-            styles.statusTitle, 
-            { color: isBanned ? colors.error : isLocked ? colors.textSecondary : colors.text }
-          ]}>
-            {isBanned ? "PROTOCOL: RESTRICTED" : isLocked ? "STATUS: STANDBY" : "STATUS: ACTIVE"}
+          <Text style={[styles.statusTitle, { color: content.color }]}>
+            {content.title}
           </Text>
         </View>
 
         <Text style={styles.statusDescription}>
-          {isBanned 
-            ? "Connection signal terminated by safety protocol. Recovery in progress."
-            : isLocked 
-              ? "Scanning for critical battery signature. Signal locked until voltage drops below threshold." 
-              : "Signature verified. Life support synchronized. Terminal session ready for initialization."}
+          {content.description}
         </Text>
-
       </View>
     </View>
   );

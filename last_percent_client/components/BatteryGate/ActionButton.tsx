@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { createStyles } from './ActionButton.styles';
 import { useStyles } from '@/hooks/useStyles';
@@ -19,6 +19,13 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 }) => {
   const styles = useStyles(createStyles);
   
+  const getButtonText = () => {
+    if (isPending) return "JUST A MOMENT...";
+    if (isBanned) return "CURRENTLY UNAVAILABLE";
+    if (isLocked) return "ALMOST READY";
+    return "JOIN THE CONVERSATION";
+  };
+
   return (
     <Animated.View 
       entering={FadeInUp.delay(400).duration(800)}
@@ -37,9 +44,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
           styles.buttonText, 
           (isLocked || isBanned || isPending) && styles.buttonTextDisabled
         ]}>
-          {isPending 
-            ? "INITIATING..." 
-            : isBanned ? "RESTRICTED" : isLocked ? "CHECKING SENSORS..." : "START SESSION"}
+          {getButtonText()}
         </Text>
       </TouchableOpacity>
     </Animated.View>

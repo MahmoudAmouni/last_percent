@@ -1,90 +1,69 @@
 import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
 export const createStyles = (colors: any) => StyleSheet.create({
   mainVisual: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
     width: '100%',
+    paddingVertical: 40,
   },
-  pulseWrapper: {
-    position: 'relative',
+  batteryWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    width: 140,
     height: 240,
   },
-  // The "Pulse Core"
-  core: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 5,
+  // The Vertical Battery Body
+  batteryBody: {
+    width: 120,
+    height: 200,
+    borderRadius: 30,
+    borderWidth: 3,
+    borderColor: colors.text,
+    position: 'relative',
+    overflow: 'hidden',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
   },
-  coreInner: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
+  batteryCap: {
+    width: 50,
+    height: 12,
+    backgroundColor: colors.text,
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
+    marginBottom: -2,
+    zIndex: 2,
   },
-  // Waveform container
-  waveformContainer: {
+  batteryLevel: {
+    width: '100%',
     position: 'absolute',
     left: 0,
     right: 0,
-    height: 120,
-    justifyContent: 'center',
+    bottom: 0,
   },
-  // Data readouts
-  dataRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingHorizontal: 20,
-    marginTop: 40,
-  },
-  dataBox: {
-    alignItems: 'flex-start',
-  },
-  dataLabel: {
-    fontSize: 10,
-    color: colors.textSecondary,
-    fontWeight: '800',
-    letterSpacing: 2,
-    marginBottom: 4,
-  },
-  dataValue: {
-    fontSize: 24,
-    fontWeight: '900',
-    color: colors.text,
-    letterSpacing: -1,
-  },
-  dataUnit: {
-    fontSize: 10,
-    color: colors.primary,
-    fontWeight: '700',
-  },
-  // HUD Elements
-  hudLine: {
+  contentContainer: {
     position: 'absolute',
-    width: 2,
-    backgroundColor: colors.primary,
-    opacity: 0.3,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
   },
   percentageText: {
-    fontSize: 16,
+    fontFamily: Fonts.title,
+    fontSize: 36,
     fontWeight: '900',
     color: colors.text,
+    marginTop: 8,
   },
-  countdownText: {
-    fontSize: 32,
-    fontWeight: '900',
-    color: colors.error,
-    textAlign: 'center',
+  statusText: {
+    fontFamily: Fonts.body,
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginTop: 24,
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
 });
