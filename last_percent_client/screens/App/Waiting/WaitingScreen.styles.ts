@@ -14,5 +14,6 @@ export const createStyles = (colors: any) => StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+    paddingHorizontal: 30,
   },
 });
