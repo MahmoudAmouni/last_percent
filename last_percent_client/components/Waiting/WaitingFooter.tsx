@@ -13,13 +13,13 @@ export default function WaitingFooter({ batteryLevel }: WaitingFooterProps) {
   return (
     <View style={styles.footer}>
       <Text style={styles.batteryText}>
-        CURRENT POWER: <Text style={styles.batteryLevel}>{batteryLevel ?? '--'}%</Text>
+        Still breathing at <Text style={styles.batteryLevel}>{batteryLevel ?? '--'}%</Text>
       </Text>
       
       <View style={styles.metaContainer}>
-        <Text style={styles.metaText}>SIGNAL: ACTIVE</Text>
-        <Text style={styles.metaText}>BAND: 2.4GHZ</Text>
-        <Text style={styles.metaText}>TYPE: TERMINAL</Text>
+        <Text style={styles.metaText}>
+          You will be connected to someone also dying with you.
+        </Text>
       </View>
     </View>
   );

@@ -1,32 +1,32 @@
 import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
 export const createStyles = (colors: any) => StyleSheet.create({
   footer: {
     paddingVertical: 30,
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.05)',
   },
   batteryText: {
-    fontSize: 10,
+    fontFamily: Fonts.body,
+    fontSize: 14,
     color: colors.textSecondary,
-    fontWeight: '800',
-    letterSpacing: 2,
-    textTransform: 'uppercase',
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   batteryLevel: {
+    fontFamily: Fonts.title,
     color: colors.primary,
-    fontWeight: '900',
+    fontWeight: '800',
   },
   metaContainer: {
     flexDirection: 'row',
-    marginTop: 15,
+    marginTop: 10,
   },
   metaText: {
-    fontSize: 8,
-    color: 'rgba(255, 255, 255, 0.2)',
-    fontWeight: '700',
-    marginHorizontal: 10,
-    letterSpacing: 1,
+    fontFamily: Fonts.body,
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.3)',
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });

@@ -1,39 +1,39 @@
 import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
 export const createStyles = (colors: any) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 15,
-    paddingHorizontal: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    paddingVertical: 40,
+    paddingHorizontal: 0,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   titleContainer: {
     alignItems: 'flex-end',
   },
   title: {
-    fontSize: 14,
-    fontWeight: '900',
+    fontFamily: Fonts.title,
+    fontSize: 16,
+    fontWeight: '800',
     color: colors.text,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   statusText: {
-    fontSize: 9,
-    color: colors.primary,
-    fontWeight: '800',
+    fontFamily: Fonts.body,
+    fontSize: 11,
+    color: colors.textSecondary,
+    fontWeight: '600',
     marginTop: 2,
   },
 });

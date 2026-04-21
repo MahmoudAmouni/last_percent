@@ -20,12 +20,12 @@ export default function WaitingHeader({ onBack }: WaitingHeaderProps) {
         style={styles.backButton}
         activeOpacity={0.7}
       >
-        <Ionicons name="close" size={20} color={colors.text} />
+        <Ionicons name="close" size={24} color={colors.text} />
       </TouchableOpacity>
 
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>QUEUE STATUS</Text>
-        <Text style={styles.statusText}>ENCRYPTED CHANNEL</Text>
+        <Text style={styles.title}>Finding your match</Text>
+        <Text style={styles.statusText}>Safe & Anonymous</Text>
       </View>
     </View>
   );

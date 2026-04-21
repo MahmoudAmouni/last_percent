@@ -1,26 +1,27 @@
 import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
 export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
-    marginTop: -40,
   },
   iconContainer: {
-    marginBottom: 30,
+    marginBottom: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: colors.error,
+    fontFamily: Fonts.title,
+    fontSize: 32,
+    fontWeight: '900',
+    color: colors.text,
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   description: {
+    fontFamily: Fonts.body,
     fontSize: 16,
     color: colors.textSecondary,
     textAlign: 'center',
@@ -28,25 +29,27 @@ export const createStyles = (colors: any) => StyleSheet.create({
     marginBottom: 40,
   },
   timerContainer: {
-    backgroundColor: `${colors.error}14`, // 0.08 opacity in hex is approx 14
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+    borderRadius: 30,
     borderWidth: 1,
-    borderColor: `${colors.error}26`, // 0.15 opacity in hex is approx 26
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    alignItems: 'center',
   },
   timerText: {
-    fontSize: 32,
-    fontWeight: '700',
+    fontFamily: Fonts.title,
+    fontSize: 40,
+    fontWeight: '800',
     color: colors.error,
-    fontVariant: ['tabular-nums'],
   },
   timerLabel: {
+    fontFamily: Fonts.body,
     fontSize: 12,
-    color: `${colors.error}66`, // 0.4 opacity in hex is approx 66
+    color: colors.textSecondary,
     textAlign: 'center',
-    marginTop: 4,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    marginTop: 6,
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
 });

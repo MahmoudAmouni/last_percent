@@ -8,60 +8,60 @@ import Animated, {
   Easing,
   FadeIn
 } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 import { createStyles } from './WaitingStatus.styles';
 import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export default function WaitingStatus() {
   const styles = useStyles(createStyles);
-  const rotation = useSharedValue(0);
+  const { colors } = useTheme();
   const pulse = useSharedValue(1);
+  const opacity = useSharedValue(0.4);
 
   useEffect(() => {
-    rotation.value = withRepeat(
-      withTiming(360, { duration: 4000, easing: Easing.linear }),
-      -1,
-      false
-    );
     pulse.value = withRepeat(
-      withTiming(1.2, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+      withTiming(1.3, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
+      -1,
+      true
+    );
+    opacity.value = withRepeat(
+      withTiming(0.1, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
       -1,
       true
     );
   }, []);
 
-  const scannerStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotation.value}deg` }],
-  }));
-
   const pulseStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulse.value }],
-    opacity: 0.2 / pulse.value,
+    opacity: opacity.value,
+  }));
+
+  const innerPulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: 0.95 + (pulse.value - 1) * 0.2 }],
   }));
 
   return (
     <View style={styles.container}>
       <Animated.View entering={FadeIn.duration(1000)} style={styles.pulseContainer}>
-        {/* Animated Sonar Rings */}
-        <AnimatedView style={[styles.radarCircle, pulseStyle]} />
-        <AnimatedView style={[styles.radarCircle, { width: 180, height: 180, borderRadius: 90 }, pulseStyle]} />
+        {/* Soft Breathing Rings */}
+        <AnimatedView style={[styles.pulseCircle, pulseStyle]} />
+        <AnimatedView style={[styles.pulseCircle, { width: 180, height: 180, borderRadius: 90 }, pulseStyle]} />
         
-        {/* Rotating Scanner Line */}
-        <AnimatedView style={[styles.scannerLine, scannerStyle]} />
-
-        {/* HUD Brackets */}
-        <View style={[styles.cornerBracket, { top: 0, left: 0, borderTopWidth: 2, borderLeftWidth: 2 }]} />
-        <View style={[styles.cornerBracket, { top: 0, right: 0, borderTopWidth: 2, borderRightWidth: 2 }]} />
-        <View style={[styles.cornerBracket, { bottom: 0, left: 0, borderBottomWidth: 2, borderLeftWidth: 2 }]} />
-        <View style={[styles.cornerBracket, { bottom: 0, right: 0, borderBottomWidth: 2, borderRightWidth: 2 }]} />
-
-        <View style={styles.statusContent}>
-          <Text style={styles.searchingText}>SCANNING FREQUENCIES</Text>
-          <Text style={styles.mainStatus}>Finding a companion...</Text>
-          <Text style={styles.subStatus}>Waiting for a matching signal</Text>
-        </View>
+        <AnimatedView style={[styles.innerCircle, innerPulseStyle]}>
+          <Ionicons name="heart-half" size={40} color={colors.primary} />
+        </AnimatedView>
       </Animated.View>
+
+      <View style={styles.statusContent}>
+        <Text style={styles.searchingText}>Looking for a soul</Text>
+        <Text style={styles.mainStatus}>Finding your companion...</Text>
+        <Text style={styles.subStatus}>
+          The best conversations happen when the power is low. Stay with us.
+        </Text>
+      </View>
     </View>
   );
 }

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
 export const createStyles = (colors: any) => StyleSheet.create({
   container: {
@@ -7,61 +8,59 @@ export const createStyles = (colors: any) => StyleSheet.create({
     alignItems: 'center',
   },
   pulseContainer: {
-    width: 280,
-    height: 280,
+    width: 300,
+    height: 300,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  // Radar/Sonar effect
-  radarCircle: {
+  // Soft Breathing Ring
+  pulseCircle: {
     position: 'absolute',
-    width: 240,
-    height: 240,
-    borderRadius: 120,
-    borderWidth: 1,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+    borderWidth: 2,
     borderColor: colors.primary,
-    opacity: 0.1,
   },
-  // Scanner line
-  scannerLine: {
-    position: 'absolute',
-    width: 2,
-    height: 120,
-    backgroundColor: colors.primary,
-    bottom: '50%',
-    transformOrigin: 'bottom center',
+  innerCircle: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   statusContent: {
     alignItems: 'center',
-    zIndex: 10,
+    marginTop: 40,
   },
   searchingText: {
-    fontSize: 10,
-    fontWeight: '900',
+    fontFamily: Fonts.title,
+    fontSize: 12,
+    fontWeight: '800',
     color: colors.primary,
-    letterSpacing: 4,
+    letterSpacing: 2,
     textTransform: 'uppercase',
-    marginBottom: 8,
+    marginBottom: 12,
+    opacity: 0.8,
   },
   mainStatus: {
-    fontSize: 24,
-    fontWeight: '800',
+    fontFamily: Fonts.title,
+    fontSize: 28,
+    fontWeight: '900',
     color: colors.text,
     textAlign: 'center',
     letterSpacing: -0.5,
   },
   subStatus: {
-    fontSize: 14,
+    fontFamily: Fonts.body,
+    fontSize: 15,
     color: colors.textSecondary,
-    marginTop: 8,
+    marginTop: 10,
     fontWeight: '500',
-  },
-  // HUD Accents
-  cornerBracket: {
-    position: 'absolute',
-    width: 20,
-    height: 20,
-    borderColor: colors.primary,
-    opacity: 0.5,
+    textAlign: 'center',
+    lineHeight: 22,
   },
 });
