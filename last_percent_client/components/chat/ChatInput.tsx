@@ -23,25 +23,33 @@ export const ChatInput = ({
   const styles = useStyles(createStyles);
   const { colors } = useTheme();
 
+  const isDisabled = !inputText.trim() || isSending || !isPartnerPresent;
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
         style={styles.input}
-        placeholder="Keep the spirit alive..."
-        placeholderTextColor={colors.textSecondary}
+        placeholder="Say something before it's over..."
+        placeholderTextColor="rgba(255, 255, 255, 0.3)"
         value={inputText}
         onChangeText={setInputText}
         multiline
+        blurOnSubmit={false}
       />
       <TouchableOpacity 
         onPress={onSend} 
         style={[
           styles.sendButton, 
-          (!inputText.trim() || !isPartnerPresent) && styles.sendButtonDisabled
+          isDisabled && styles.sendButtonDisabled
         ]}
-        disabled={!inputText.trim() || isSending || !isPartnerPresent}
+        disabled={isDisabled}
+        activeOpacity={0.8}
       >
-        <Ionicons name="send" size={20} color={colors.background} />
+        <Ionicons 
+          name="send" 
+          size={20} 
+          color={isDisabled ? 'rgba(255, 255, 255, 0.2)' : colors.background} 
+        />
       </TouchableOpacity>
     </View>
   );
