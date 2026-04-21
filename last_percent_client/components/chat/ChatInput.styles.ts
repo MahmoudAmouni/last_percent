@@ -1,25 +1,30 @@
 import { StyleSheet, Platform } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
 export const createStyles = (colors: any) => StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    padding: 16,
-    paddingBottom: Platform.OS === 'ios' ? 16 : 24,
-    backgroundColor: colors.background,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     borderTopWidth: 1,
-    borderTopColor: colors.border,
+    borderTopColor: 'rgba(255, 255, 255, 0.05)',
   },
   input: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 24,
     paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: 14,
+    paddingBottom: 14,
     color: colors.text,
+    fontFamily: Fonts.body,
     fontSize: 16,
-    maxHeight: 100,
+    maxHeight: 120,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   sendButton: {
     width: 48,
@@ -29,8 +34,17 @@ export const createStyles = (colors: any) => StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 12,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   sendButtonDisabled: {
-    backgroundColor: `${colors.primary}4D`, // 0.3 opacity approx 4D
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    shadowOpacity: 0,
+    elevation: 0,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
   },
 });
