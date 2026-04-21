@@ -1,30 +1,35 @@
 import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   button: {
-    height: 64,
-    borderRadius: 32,
+    height: 60,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FF4D4D',
-    shadowColor: '#FF4D4D',
-    shadowOffset: { width: 0, height: 8 },
+    backgroundColor: colors.primary,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowRadius: 8,
+    elevation: 4,
   },
   buttonDisabled: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
     shadowOpacity: 0,
     elevation: 0,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   buttonText: {
-    fontSize: 18,
+    fontFamily: Fonts.title,
+    fontSize: 16,
     fontWeight: '800',
-    color: '#FFF',
-    letterSpacing: 1,
+    color: colors.background,
+    letterSpacing: 0.5,
   },
   buttonTextDisabled: {
-    color: 'rgba(255, 255, 255, 0.3)',
+    color: colors.textSecondary,
+    fontWeight: '600',
   },
 });

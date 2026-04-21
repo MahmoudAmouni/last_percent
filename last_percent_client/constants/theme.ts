@@ -10,44 +10,56 @@ const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: '#1A1A1A',
+    textSecondary: 'rgba(26, 26, 26, 0.5)',
+    background: '#FFFFFF',
+    tint: '#FF4D4D',
+    icon: '#4A4A4A',
+    tabIconDefault: '#4A4A4A',
+    tabIconSelected: '#FF4D4D',
+    primary: '#FF4D4D',
+    secondary: '#FF7E5F',
+    surface: '#F5F5F5',
+    error: '#E11D48',
+    border: 'rgba(0, 0, 0, 0.08)',
+    online: '#10B981',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
+    text: '#FFFFFF',
+    textSecondary: 'rgba(255, 255, 255, 0.5)',
+    background: '#0F0F0F',
+    tint: '#FF4D4D',
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    tabIconSelected: '#FF4D4D',
+    primary: '#FF4D4D', // Pulse Red (from logo)
+    secondary: '#FF7E5F', // Lava Orange (from logo)
+    surface: '#1A1A1A', // Deep Charcoal
+    error: '#FF3B30', // System Red
+    border: 'rgba(255, 255, 255, 0.1)',
+    online: '#34D399',
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+    title: 'Avenir-Heavy',
+    body: 'Avenir-Medium',
+    mono: 'Menlo',
+  },
+  android: {
+    title: 'sans-serif-medium',
+    body: 'sans-serif-light',
+    mono: 'monospace',
   },
   default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
+    title: 'System',
+    body: 'System',
     mono: 'monospace',
   },
   web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+    title: 'System',
+    body: 'System',
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });

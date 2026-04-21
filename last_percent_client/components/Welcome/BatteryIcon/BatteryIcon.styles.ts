@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 40,
   },
   glowContainer: {
     padding: 20,
+    borderRadius: 30,
   },
 });

@@ -1,44 +1,37 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     marginBottom: 20,
     width: '100%',
   },
   label: {
-    color: 'rgba(255, 255, 255, 0.5)',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '600',
+    color: colors.text,
     marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginLeft: 4,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 16,
-    borderWidth: 1.5,
     height: 56,
+    borderWidth: 1,
+    borderRadius: 12,
+    backgroundColor: colors.surface,
     paddingHorizontal: 16,
   },
   input: {
     flex: 1,
-    color: '#FFF',
+    height: '100%',
+    color: colors.text,
     fontSize: 16,
-    fontWeight: '500',
-    fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
   },
   iconContainer: {
-    marginLeft: 12,
-    padding: 4,
+    padding: 8,
   },
   errorText: {
-    color: '#FF4D4D',
+    color: colors.error,
     fontSize: 12,
-    marginTop: 6,
-    marginLeft: 4,
-    fontWeight: '500',
+    marginTop: 4,
   },
 });

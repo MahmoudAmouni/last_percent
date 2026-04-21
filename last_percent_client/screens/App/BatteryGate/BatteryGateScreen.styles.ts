@@ -1,11 +1,9 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
-
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.background,
     width: '100%',
     maxWidth: Platform.OS === 'web' ? 440 : '100%',
     alignSelf: 'center',
@@ -22,24 +20,43 @@ export const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    justifyContent: 'space-between',
-    paddingBottom: 40,
+    paddingHorizontal: 30,
     paddingTop: Platform.OS === 'ios' ? 20 : 40,
+    justifyContent: 'space-between',
+  },
+  mainContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   footer: {
     width: '100%',
+    paddingBottom: 40,
+  },
+  decorationCircle: {
+    position: 'absolute',
+    width: 600,
+    height: 600,
+    borderRadius: 300,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.03)',
+    top: -200,
+    right: -100,
   },
   debugToggle: {
     position: 'absolute',
     bottom: 10,
     right: 10,
-    padding: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 8,
+    padding: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   debugToggleText: {
-    color: 'rgba(255, 255, 255, 0.3)',
+    color: colors.textSecondary,
     fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
 });

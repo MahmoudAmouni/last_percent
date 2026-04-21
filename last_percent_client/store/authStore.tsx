@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { storage } from './utils/storage';
 import { User } from './types';
+import { jwtDecode } from 'jwt-decode';
 export { User };
 
 interface AuthState {
@@ -55,9 +56,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const initializeAuth = async (): Promise<void> => {
-    const token = await storage.getItem('jwt_token');
-    if (token) {
-      dispatch({ type: 'SET_TOKEN', token });
+    try {
+      const token = await storage.getItem('jwt_token');
+      if (token) {
+        const decoded = jwtDecode<Record<string, string>>(token);
+        const user: User = {
+          id: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+          email: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+          isEmailVerified: true,
+        };
+        dispatch({ type: 'SET_AUTH', user, token });
+      }
+    } catch {
+      await storage.removeItem('jwt_token');
     }
   };
 

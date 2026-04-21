@@ -1,34 +1,35 @@
 import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
-export const styles = StyleSheet.create({
-  statusCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+export const createStyles = (colors: any) => StyleSheet.create({
+  container: {
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
     borderRadius: 24,
     padding: 24,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    marginBottom: 32,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    marginBottom: 30,
+    width: '100%',
+  },
+  contentWrapper: {
+    gap: 12,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   statusTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#FFF',
-    marginBottom: 8,
-    textAlign: 'center',
+    fontFamily: Fonts.title,
+    fontSize: 15,
+    fontWeight: '800',
+    letterSpacing: 0.5,
   },
   statusDescription: {
+    fontFamily: Fonts.body,
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.6)',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  suspendedCard: {
-    borderColor: '#FF4D4D',
-    borderWidth: 2,
-    backgroundColor: 'rgba(255, 77, 77, 0.05)',
-  },
-  warningIconWrapper: {
-    marginBottom: 10,
-    alignItems: 'center',
+    color: colors.textSecondary,
+    lineHeight: 22,
+    fontWeight: '500',
   },
 });

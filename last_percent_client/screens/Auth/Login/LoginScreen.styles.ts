@@ -1,11 +1,9 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
-
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.background,
   },
   gradient: {
     position: 'absolute',
@@ -22,82 +20,69 @@ export const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: Platform.OS === 'ios' ? 0 : 20,
-    justifyContent: 'space-between',
-    paddingBottom: 20,
+    paddingHorizontal: 30,
+    paddingTop: 40,
   },
   header: {
-    alignItems: 'center',
-    marginTop: 10,
-    position: 'relative',
-    height: 180,
-    justifyContent: 'center',
+    marginBottom: 40,
   },
   backButton: {
-    position: 'absolute',
-    left: 0,
-    top: 20,
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'center',
     marginTop: -20,
   },
   title: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#FFF',
-    letterSpacing: -0.5,
-    marginBottom: 8,
-    fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
+    color: colors.text,
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.5)',
-    marginBottom: 32,
-    fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
+    color: colors.textSecondary,
+    marginBottom: 40,
+  },
+  errorText: {
+    color: colors.error,
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 20,
+    fontWeight: '600',
   },
   forgotPassword: {
     alignSelf: 'flex-end',
-    marginBottom: 32,
+    marginBottom: 30,
   },
   forgotPasswordText: {
-    color: '#FF4D4D',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '600',
   },
   loginButton: {
-    marginTop: 10,
+    marginBottom: 10, // Reduced bottom margin
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    paddingBottom: 10,
+    paddingVertical: 10, // Reduced vertical padding
   },
   footerText: {
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: colors.textSecondary,
     fontSize: 14,
   },
   registerText: {
-    color: '#FF4D4D',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '700',
-  },
-  errorText: {
-    color: '#FF4D4D',
-    fontSize: 14,
-    textAlign: 'center',
-    marginBottom: 20,
-    fontWeight: '500',
   },
 });

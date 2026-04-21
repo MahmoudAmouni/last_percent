@@ -1,23 +1,39 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   header: {
     alignItems: 'center',
-    marginTop: 20,
+    paddingTop: 10,
+    marginBottom: 10,
   },
   title: {
-    fontSize: 40,
+    fontFamily: Fonts.title,
+    fontSize: 34,
     fontWeight: '900',
-    color: '#FFF',
-    letterSpacing: -1,
+    color: colors.text,
     textAlign: 'center',
-    fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.5)',
+    fontFamily: Fonts.body,
+    fontSize: 15,
+    color: colors.textSecondary,
     textAlign: 'center',
-    marginTop: 8,
-    fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
+    marginTop: 6,
+    fontWeight: '500',
+    paddingHorizontal: 40,
+    lineHeight: 20,
+  },
+  accentLine: {
+    width: 40,
+    height: 4,
+    backgroundColor: colors.primary,
+    marginTop: 20,
+    borderRadius: 2,
+    opacity: 0.6,
+  },
+  accentLineBanned: {
+    backgroundColor: colors.error,
   },
 });

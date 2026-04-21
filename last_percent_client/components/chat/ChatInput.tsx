@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { styles } from './ChatInput.styles';
+import { createStyles } from './ChatInput.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 interface ChatInputProps {
   inputText: string;
@@ -18,25 +20,36 @@ export const ChatInput = ({
   isSending, 
   isPartnerPresent 
 }: ChatInputProps) => {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
+
+  const isDisabled = !inputText.trim() || isSending || !isPartnerPresent;
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
         style={styles.input}
-        placeholder="Keep the spirit alive..."
+        placeholder="Say something before it's over..."
         placeholderTextColor="rgba(255, 255, 255, 0.3)"
         value={inputText}
         onChangeText={setInputText}
         multiline
+        blurOnSubmit={false}
       />
       <TouchableOpacity 
         onPress={onSend} 
         style={[
           styles.sendButton, 
-          (!inputText.trim() || !isPartnerPresent) && styles.sendButtonDisabled
+          isDisabled && styles.sendButtonDisabled
         ]}
-        disabled={!inputText.trim() || isSending || !isPartnerPresent}
+        disabled={isDisabled}
+        activeOpacity={0.8}
       >
-        <Ionicons name="send" size={20} color="#FFF" />
+        <Ionicons 
+          name="send" 
+          size={20} 
+          color={isDisabled ? 'rgba(255, 255, 255, 0.2)' : colors.background} 
+        />
       </TouchableOpacity>
     </View>
   );

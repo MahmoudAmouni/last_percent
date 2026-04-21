@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { styles } from './StatusCard.styles';
+import { createStyles } from './StatusCard.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 interface StatusCardProps {
   isBanned: boolean;
@@ -9,25 +11,54 @@ interface StatusCardProps {
 }
 
 export const StatusCard: React.FC<StatusCardProps> = ({ isBanned, isLocked }) => {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
+
+  const getStatusContent = () => {
+    if (isBanned) {
+      return {
+        icon: "heart-half-outline",
+        title: "RESTING",
+        description: "Your previous connection ended abruptly. We're letting things cool down before your next match.",
+        color: colors.error
+      };
+    }
+    if (isLocked) {
+      return {
+        icon: "moon-outline",
+        title: "STAY TUNED",
+        description: "The best stories happen in the final moments. Use your phone naturally until the battery drops.",
+        color: colors.textSecondary
+      };
+    }
+    return {
+      icon: "sparkles-outline",
+      title: "ALL SET",
+      description: "You're in the magic zone. Start your session to find someone dying with you.",
+      color: colors.primary
+    };
+  };
+
+  const content = getStatusContent();
+
   return (
-    <View style={[styles.statusCard, isBanned && styles.suspendedCard]}>
-      <View style={styles.warningIconWrapper}>
-        <Ionicons 
-          name={isBanned ? "warning" : isLocked ? "shield-checkmark" : "flash"} 
-          size={24} 
-          color="#FF4D4D" 
-        />
+    <View style={styles.container}>
+      <View style={styles.contentWrapper}>
+        <View style={styles.headerRow}>
+          <Ionicons 
+            name={content.icon as any} 
+            size={20} 
+            color={content.color} 
+          />
+          <Text style={[styles.statusTitle, { color: content.color }]}>
+            {content.title}
+          </Text>
+        </View>
+
+        <Text style={styles.statusDescription}>
+          {content.description}
+        </Text>
       </View>
-      <Text style={styles.statusTitle}>
-        {isBanned ? "PENALTY ACTIVE" : isLocked ? "Wait for it..." : "Status: Optimal Failure"}
-      </Text>
-      <Text style={styles.statusDescription}>
-        {isBanned 
-          ? "You left an active match early. To maintain network integrity, a 30-minute lockout has been applied to your device."
-          : isLocked 
-            ? "We only connect users in their last percent. Come back when you are below 20%." 
-            : "Device state validated. You are now eligible to find a companion for the end."}
-      </Text>
     </View>
   );
 };

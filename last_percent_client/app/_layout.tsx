@@ -13,6 +13,8 @@ import { AuthProvider, useAuthContext } from '@/store/authStore';
 import { ChatProvider, useChatContext } from '@/store/chatStore';
 import { SessionProvider } from '@/store/sessionStore';
 import { SuspensionProvider } from '@/store/suspensionStore';
+import { ThemeProvider as AppThemeProvider } from '@/store/themeStore';
+import { useTheme } from '@/hooks/useTheme';
 import { websocketService } from '@/services/websocketService';
 import { useWebSocketEvents } from '@/hooks/useWebSocket';
 import { useRouter, useSegments } from 'expo-router';
@@ -23,6 +25,7 @@ export const unstable_settings = {
 
 function AppNavigator() {
   const colorScheme = useColorScheme();
+  const { colors } = useTheme();
   const { isAuthenticated, initializeAuth, token } = useAuthContext();
   const { matchStatus } = useChatContext();
   const router = useRouter();
@@ -64,12 +67,18 @@ function AppNavigator() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <View style={styles.webContainer}>
+      <View style={[
+        styles.webContainer, 
+        { 
+          backgroundColor: colors.background,
+          borderColor: colors.border
+        }
+      ]}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(app)" />
         </Stack>
-        <StatusBar style="auto" />
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       </View>
     </ThemeProvider>
   );
@@ -78,15 +87,17 @@ function AppNavigator() {
 export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ChatProvider>
-          <SessionProvider>
-            <SuspensionProvider>
-              <AppNavigator />
-            </SuspensionProvider>
-          </SessionProvider>
-        </ChatProvider>
-      </AuthProvider>
+      <AppThemeProvider>
+        <AuthProvider>
+          <ChatProvider>
+            <SessionProvider>
+              <SuspensionProvider>
+                <AppNavigator />
+              </SuspensionProvider>
+            </SessionProvider>
+          </ChatProvider>
+        </AuthProvider>
+      </AppThemeProvider>
     </QueryClientProvider>
   );
 }
@@ -94,7 +105,6 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   webContainer: {
     flex: 1,
-    backgroundColor: '#000',
     width: '100%',
     maxWidth: Platform.OS === 'web' ? 440 : undefined,
     alignSelf: 'center',
@@ -102,7 +112,6 @@ const styles = StyleSheet.create({
       boxShadow: '0 0 20px rgba(0,0,0,0.5)',
       borderLeftWidth: 1,
       borderRightWidth: 1,
-      borderColor: '#333',
     }),
   },
 });

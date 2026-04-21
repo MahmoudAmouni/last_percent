@@ -6,14 +6,18 @@ import { useJoinQueue, useLeaveQueue } from '@/hooks/useQueue';
 import { useSessionContext } from '@/store/sessionStore';
 import { useChatContext, MatchStatus } from '@/store/chatStore';
 import { useSuspensionContext } from '@/store/suspensionStore';
+import { createStyles } from './WaitingScreen.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 import WaitingHeader from '@/components/Waiting/WaitingHeader';
 import WaitingStatus from '@/components/Waiting/WaitingStatus';
 import WaitingFooter from '@/components/Waiting/WaitingFooter';
 import WaitingSuspension from '@/components/Waiting/WaitingSuspension';
-import { styles } from './WaitingScreen.styles';
 
 export default function WaitingScreen() {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const joinQueueMutation = useJoinQueue();
   const leaveQueueMutation = useLeaveQueue();
@@ -24,16 +28,12 @@ export default function WaitingScreen() {
   const [timeLeft, setTimeLeft] = useState(getRemainingSeconds());
   const suspended = isSuspended();
 
-  // Handle timer for suspended state
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | undefined;
     if (suspended) {
       interval = setInterval(() => {
         const remaining = getRemainingSeconds();
         setTimeLeft(remaining);
-        if (remaining <= 0) {
-          // If suspension expires while on screen, we could potentially join queue or just let user go back
-        }
       }, 1000);
     }
     return () => {
@@ -41,7 +41,6 @@ export default function WaitingScreen() {
     };
   }, [suspended, getRemainingSeconds]);
 
-  // Only join queue if NOT suspended
   useEffect(() => {
     if (batteryLevel !== null && !suspended && hydrated) {
       joinQueueMutation.mutate({ batteryLevel });
@@ -57,32 +56,47 @@ export default function WaitingScreen() {
   }, [matchStatus, router]);
 
   const handleBack = () => {
-    if (suspended) {
+    if (suspended || matchStatus === MatchStatus.Matched) {
        router.back();
     } else {
       leaveQueueMutation.mutate(undefined, {
         onSuccess: () => router.back(),
-        onError: () => router.back(), // Fallback
+        onError: () => router.back(), 
       });
     }
   };
 
   if (!hydrated) return null;
 
+  const gradientColors = suspended 
+    ? ['#0D0D0D', '#1A0505'] 
+    : [colors.background, colors.surface];
+
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={suspended ? ['#1A0B0B', '#2D0A0A'] : ['#100F0F', '#1A0B0B', '#2D0A0A']}
-        style={styles.gradient}
-      />
+      <LinearGradient colors={gradientColors} style={styles.gradient} />
+      
+      <View style={{ 
+        position: 'absolute', 
+        top: '22%', 
+        left: '10%', 
+        right: '10%', 
+        height: 300, 
+        backgroundColor: suspended ? colors.error : colors.primary,
+        opacity: 0.05,
+        borderRadius: 150,
+      } as any} />
+
       <SafeAreaView style={styles.safeArea}>
         <WaitingHeader onBack={handleBack} />
         
-        {suspended ? (
-          <WaitingSuspension timeLeft={timeLeft} />
-        ) : (
-          <WaitingStatus />
-        )}
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          {suspended ? (
+            <WaitingSuspension timeLeft={timeLeft} />
+          ) : (
+            <WaitingStatus />
+          )}
+        </View>
 
         {!suspended && <WaitingFooter batteryLevel={batteryLevel} />}
       </SafeAreaView>

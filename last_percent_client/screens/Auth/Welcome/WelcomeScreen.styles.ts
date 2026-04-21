@@ -1,11 +1,9 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
-
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.background,
   },
   gradient: {
     position: 'absolute',
@@ -14,51 +12,42 @@ export const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
   },
-  safeArea: {
-    flex: 1,
-  },
   content: {
     flex: 1,
-    justifyContent: 'space-between',
     paddingHorizontal: 30,
-    paddingTop: height * 0.05,
-    paddingBottom: height * 0.05,
+    justifyContent: 'space-between',
+    paddingBottom: Platform.OS === 'ios' ? 80 : 60,
+    paddingTop: 80,
   },
-  logoContainer: {
+  brandContainer: {
     alignItems: 'center',
-    marginTop: 20,
-  },
-  textContainer: {
-    alignItems: 'center',
-    marginBottom: 40,
   },
   title: {
-    fontSize: 42,
-    fontWeight: '800',
-    color: '#FFF',
-    letterSpacing: -1,
+    fontSize: 48,
+    fontWeight: '900',
+    color: colors.text,
     textAlign: 'center',
-    marginBottom: 10,
+    letterSpacing: -2,
+    lineHeight: 48,
+    marginTop: 20,
     fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
+  },
+  highlight: {
+    color: colors.primary,
   },
   subtitle: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: colors.textSecondary,
     textAlign: 'center',
+    marginTop: 15,
     lineHeight: 24,
-    maxWidth: width * 0.7,
+    fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
   },
-  footer: {
+  buttonContainer: {
     width: '100%',
-    alignItems: 'center',
+    gap: 16,
   },
-  button: {
-    marginBottom: 12,
-  },
-  terms: {
-    fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.4)',
-    marginTop: 20,
-    textAlign: 'center',
+  loginButton: {
+    marginTop: 10,
   },
 });

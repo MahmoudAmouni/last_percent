@@ -13,8 +13,9 @@ import { useChatContext } from '@/store/chatStore';
 import { useAuthContext } from '@/store/authStore';
 import { useSessionContext } from '@/store/sessionStore';
 import { useStartSession } from '@/hooks/useSession';
-import { useSuspensionContext } from '@/store/suspensionStore';
-import { styles } from './ChatScreen.styles';
+import { createStyles } from './ChatScreen.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 import { ChatHeader } from '@/components/chat/ChatHeader';
 import { MessageItem } from '@/components/chat/MessageItem';
@@ -22,6 +23,8 @@ import { ChatInput } from '@/components/chat/ChatInput';
 import { ReconnectCard } from '@/components/chat/ReconnectCard';
 
 export const ChatScreen = () => {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { matchId, isPartnerPresent, clearMatch, messages } = useChatContext();
   
@@ -32,8 +35,6 @@ export const ChatScreen = () => {
   
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef<FlatList>(null);
-
-  const { suspend } = useSuspensionContext();
 
   const handleSend = () => {
     if (inputText.trim() && !isSending && isPartnerPresent) {
@@ -52,7 +53,6 @@ export const ChatScreen = () => {
 
   const handleBack = async () => {
     if (matchId) {
-      
       try {
         await leaveChat();
       } catch (err) {
@@ -71,16 +71,24 @@ export const ChatScreen = () => {
     }
   }, [messages]);
 
-  useEffect(() => {
-    console.log('[ChatScreen] isPartnerPresent:', isPartnerPresent);
-  }, [isPartnerPresent, matchId]);
+  const gradientColors = [colors.background, colors.surface];
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#100F0F', '#1A0B0B', '#2D0A0A']}
-        style={styles.gradient}
-      />
+      <LinearGradient colors={gradientColors} style={styles.gradient} />
+      
+      {/* Soft Ambient Glow */}
+      <View style={{ 
+        position: 'absolute', 
+        top: '20%', 
+        right: '-10%', 
+        width: 300, 
+        height: 300, 
+        backgroundColor: colors.primary, 
+        opacity: 0.03, 
+        borderRadius: 150 
+      } as any} />
+
       <SafeAreaView style={styles.safeArea}>
         <ChatHeader 
           onBack={handleBack} 
@@ -99,6 +107,7 @@ export const ChatScreen = () => {
           keyExtractor={(item, index) => item.id?.toString() || index.toString()}
           contentContainerStyle={styles.messageList}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          showsVerticalScrollIndicator={false}
         />
 
         <KeyboardAvoidingView 

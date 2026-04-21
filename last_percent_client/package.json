@@ -8,6 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "tunnel": "ngrok http http://localhost:5249 --host-header=rewrite",
     "lint": "expo lint"
   },
   "dependencies": {

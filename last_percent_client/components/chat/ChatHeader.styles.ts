@@ -1,29 +1,34 @@
 import { StyleSheet } from 'react-native';
+import { Fonts } from '@/constants/theme';
 
-export const styles = StyleSheet.create({
+export const createStyles = (colors: any) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: 'transparent',
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 15,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   headerInfo: {
     flex: 1,
   },
   headerTitle: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: '700',
+    fontFamily: Fonts.title,
+    color: colors.text,
+    fontSize: 20,
+    fontWeight: '800',
+    letterSpacing: -0.5,
   },
   statusRow: {
     flexDirection: 'row',
@@ -31,17 +36,24 @@ export const styles = StyleSheet.create({
     marginTop: 2,
   },
   statusDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#4CAF50',
-    marginRight: 6,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.online,
+    marginRight: 8,
+    shadowColor: colors.online,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
   },
   statusDotOffline: {
-    backgroundColor: '#FF4D4D',
+    backgroundColor: colors.error,
+    shadowColor: colors.error,
   },
   statusText: {
-    color: 'rgba(255, 255, 255, 0.5)',
-    fontSize: 12,
+    fontFamily: Fonts.body,
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '600',
   },
 });

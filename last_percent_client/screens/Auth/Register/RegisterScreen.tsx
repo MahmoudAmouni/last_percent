@@ -7,7 +7,8 @@ import {
   Platform, 
   TouchableWithoutFeedback, 
   Keyboard,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -19,10 +20,14 @@ import Animated, {
 
 import AuthButton from '@/components/Welcome/AuthButton/AuthButton';
 import FormInput from '../../../components/Login/FormInput/FormInput';
-import { styles } from './RegisterScreen.styles';
+import { createStyles } from './RegisterScreen.styles';
+import { useStyles } from '@/hooks/useStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useRegister } from '@/hooks/useAuth';
 
 function RegisterScreen() {
+  const styles = useStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const registerMutation = useRegister();
   
@@ -68,7 +73,7 @@ function RegisterScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <LinearGradient
-          colors={['#100F0F', '#1A0B0B', '#2D0A0A']}
+          colors={[colors.background, colors.surface, colors.background]}
           style={styles.gradient}
         />
         
@@ -77,78 +82,86 @@ function RegisterScreen() {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.keyboardView}
           >
-            <View style={styles.content}>
-              <Animated.View 
-                entering={FadeIn.delay(200).duration(1000)}
-                style={styles.header}
-              >
-                <TouchableOpacity 
-                  onPress={() => router.back()}
-                  style={styles.backButton}
+            <ScrollView 
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ flexGrow: 1 }}
+            >
+              <View style={styles.content}>
+                <Animated.View 
+                  entering={FadeIn.delay(200).duration(1000)}
+                  style={styles.header}
                 >
-                  <Ionicons name="arrow-back" size={24} color="#FFF" />
-                </TouchableOpacity>
-              </Animated.View>
+                  <TouchableOpacity 
+                    onPress={() => router.back()}
+                    style={styles.backButton}
+                  >
+                    <Ionicons name="arrow-back" size={24} color={colors.text} />
+                  </TouchableOpacity>
+                </Animated.View>
 
-              <Animated.View 
-                entering={FadeInDown.delay(400).duration(800)}
-                style={styles.formContainer}
-              >
-                <Text style={styles.title}>Create Account</Text>
-                <Text style={styles.subtitle}>Join Last Percent today</Text>
+                <Animated.View 
+                  entering={FadeInDown.delay(400).duration(800)}
+                  style={styles.formContainer}
+                >
+                  <Text style={styles.title}>Create Account</Text>
+                  <Text style={styles.subtitle}>Join Last Percent today</Text>
 
-                <FormInput
-                  label="Email Address"
-                  value={email}
-                  onChangeText={setEmail}
-                  placeholder="name@example.com"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
+                  <FormInput
+                    label="Email Address"
+                    value={email}
+                    onChangeText={setEmail}
+                    placeholder="name@example.com"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                  />
 
-                <FormInput
-                  label="Phone Number"
-                  value={phone}
-                  onChangeText={setPhone}
-                  placeholder="+1 (555) 000-0000"
-                  keyboardType="phone-pad"
-                />
+                  <FormInput
+                    label="Phone Number"
+                    value={phone}
+                    onChangeText={setPhone}
+                    placeholder="+1 (555) 000-0000"
+                    keyboardType="phone-pad"
+                  />
 
-                <FormInput
-                  label="Password"
-                  value={password}
-                  onChangeText={setPassword}
-                  placeholder="••••••••"
-                  secureTextEntry
-                />
+                  <FormInput
+                    label="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="••••••••"
+                    secureTextEntry
+                  />
 
-                <FormInput
-                  label="Confirm Password"
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                  placeholder="••••••••"
-                  secureTextEntry
-                />
+                  <FormInput
+                    label="Confirm Password"
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                    placeholder="••••••••"
+                    secureTextEntry
+                  />
 
-                {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                  {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-                <AuthButton
-                  title={registerMutation.isPending ? "CREATING..." : "CREATE ACCOUNT"}
-                  onPress={handleRegister}
-                  style={styles.registerButton}
-                />
-              </Animated.View>
+                  <AuthButton
+                    title={registerMutation.isPending ? "CREATING..." : "CREATE ACCOUNT"}
+                    onPress={handleRegister}
+                    style={styles.registerButton}
+                  />
 
-              <Animated.View 
-                entering={FadeInDown.delay(600).duration(800)}
-                style={styles.footer}
-              >
-                <Text style={styles.footerText}>Already have an account?</Text>
-                <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
-                  <Text style={styles.loginText}> Login</Text>
-                </TouchableOpacity>
-              </Animated.View>
-            </View>
+                  <Animated.View 
+                    entering={FadeInDown.delay(600).duration(800)}
+                    style={styles.footer}
+                  >
+                    <Text style={styles.footerText}>Already have an account?</Text>
+                    <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
+                      <Text style={styles.loginText}> Login</Text>
+                    </TouchableOpacity>
+                  </Animated.View>
+                </Animated.View>
+                
+                {/* Extra space */}
+                <View style={{ height: 100 }} />
+              </View>
+            </ScrollView>
           </KeyboardAvoidingView>
         </SafeAreaView>
       </View>
