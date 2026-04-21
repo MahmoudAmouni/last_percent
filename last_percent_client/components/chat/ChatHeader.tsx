@@ -16,14 +16,20 @@ export const ChatHeader = ({ onBack, isPartnerPresent }: ChatHeaderProps) => {
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={onBack} style={styles.backButton}>
+      <TouchableOpacity 
+        onPress={onBack} 
+        style={styles.backButton}
+        activeOpacity={0.7}
+      >
         <Ionicons name="arrow-back" size={24} color={colors.text} />
       </TouchableOpacity>
       <View style={styles.headerInfo}>
-        <Text style={styles.headerTitle}>Last Percent Match</Text>
+        <Text style={styles.headerTitle}>Shared Journey</Text>
         <View style={styles.statusRow}>
           <View style={[styles.statusDot, !isPartnerPresent && styles.statusDotOffline]} />
-          <Text style={styles.statusText}>{isPartnerPresent ? 'Connected' : 'Disconnected'}</Text>
+          <Text style={styles.statusText}>
+            {isPartnerPresent ? 'Someone is here' : 'They have gone ahead'}
+          </Text>
         </View>
       </View>
     </View>
