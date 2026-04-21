@@ -32,22 +32,12 @@ function BatteryGateScreen() {
   const isLocked = mockBatteryLevel > 0.20 && !isBanned;
 
   const pulse = useSharedValue(1);
-  const glowOpacity = useSharedValue(0.15);
 
   useEffect(() => {
     pulse.value = withRepeat(
       withSequence(
         withTiming(1.05, { duration: 2000 }),
         withTiming(1, { duration: 2000 })
-      ),
-      -1,
-      true
-    );
-
-    glowOpacity.value = withRepeat(
-      withSequence(
-        withTiming(0.3, { duration: 2000 }),
-        withTiming(0.1, { duration: 2000 })
       ),
       -1,
       true
@@ -89,7 +79,6 @@ function BatteryGateScreen() {
     <View style={styles.container}>
       <LinearGradient colors={gradientColors} style={styles.gradient} />
       
-      {/* Decorative HUD Elements */}
       <View style={styles.decorationCircle} />
       
       <SafeAreaView style={styles.safeArea}>
@@ -103,7 +92,6 @@ function BatteryGateScreen() {
               mockBatteryLevel={mockBatteryLevel}
               timeLeft={timeLeft}
               pulseValue={pulse}
-              glowOpacityValue={glowOpacity}
             />
           </View>
 
