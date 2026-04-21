@@ -53,7 +53,6 @@ export const ChatScreen = () => {
 
   const handleBack = async () => {
     if (matchId) {
-      
       try {
         await leaveChat();
       } catch (err) {
@@ -72,16 +71,24 @@ export const ChatScreen = () => {
     }
   }, [messages]);
 
-  useEffect(() => {
-    console.log('[ChatScreen] isPartnerPresent:', isPartnerPresent);
-  }, [isPartnerPresent, matchId]);
+  const gradientColors = [colors.background, colors.surface];
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={[colors.background, colors.surface, colors.background]}
-        style={styles.gradient}
-      />
+      <LinearGradient colors={gradientColors} style={styles.gradient} />
+      
+      {/* Soft Ambient Glow */}
+      <View style={{ 
+        position: 'absolute', 
+        top: '20%', 
+        right: '-10%', 
+        width: 300, 
+        height: 300, 
+        backgroundColor: colors.primary, 
+        opacity: 0.03, 
+        borderRadius: 150 
+      } as any} />
+
       <SafeAreaView style={styles.safeArea}>
         <ChatHeader 
           onBack={handleBack} 
@@ -100,6 +107,7 @@ export const ChatScreen = () => {
           keyExtractor={(item, index) => item.id?.toString() || index.toString()}
           contentContainerStyle={styles.messageList}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          showsVerticalScrollIndicator={false}
         />
 
         <KeyboardAvoidingView 
