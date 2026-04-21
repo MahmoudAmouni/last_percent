@@ -5,8 +5,8 @@ import { jwtDecode } from 'jwt-decode';
 import { LoginDto, RegisterDto } from '@/types';
 
 interface DecodedToken {
-  nameid: string; 
-  email: string;  
+  'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier': string;
+  'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress': string;
   exp: number;
 }
 
@@ -21,8 +21,8 @@ export function useLogin() {
         
         await setAuth(
           {
-            id: decoded.nameid,
-            email: decoded.email || variables.email,
+            id: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+            email: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || variables.email,
             isEmailVerified: true, 
           },
           data.token
@@ -46,8 +46,8 @@ export function useRegister() {
         
         await setAuth(
           {
-            id: decoded.nameid,
-            email: decoded.email || variables.email,
+            id: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+            email: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || variables.email,
             isEmailVerified: true, 
           },
           data.token
