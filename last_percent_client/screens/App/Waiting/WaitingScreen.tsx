@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Defs, Pattern, Rect } from 'react-native-svg';
 import { useRouter } from 'expo-router';
 import { useJoinQueue, useLeaveQueue } from '@/hooks/useQueue';
 import { useSessionContext } from '@/store/sessionStore';
@@ -15,17 +14,6 @@ import WaitingHeader from '@/components/Waiting/WaitingHeader';
 import WaitingStatus from '@/components/Waiting/WaitingStatus';
 import WaitingFooter from '@/components/Waiting/WaitingFooter';
 import WaitingSuspension from '@/components/Waiting/WaitingSuspension';
-
-const TechGrid = ({ color }: { color: string }) => (
-  <Svg width="100%" height="100%">
-    <Defs>
-      <Pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-        <Path d="M 40 0 L 0 0 0 40" fill="none" stroke={color} strokeWidth="1" />
-      </Pattern>
-    </Defs>
-    <Rect width="100%" height="100%" fill="url(#grid)" />
-  </Svg>
-);
 
 export default function WaitingScreen() {
   const styles = useStyles(createStyles);
@@ -68,12 +56,12 @@ export default function WaitingScreen() {
   }, [matchStatus, router]);
 
   const handleBack = () => {
-    if (suspended) {
+    if (suspended || matchStatus === MatchStatus.Matched) {
        router.back();
     } else {
       leaveQueueMutation.mutate(undefined, {
         onSuccess: () => router.back(),
-        onError: () => router.back(), // Fallback
+        onError: () => router.back(), 
       });
     }
   };
@@ -88,10 +76,16 @@ export default function WaitingScreen() {
     <View style={styles.container}>
       <LinearGradient colors={gradientColors} style={styles.gradient} />
       
-      {/* HUD Grid Background */}
-      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.03 }}>
-        <TechGrid color={suspended ? colors.error : colors.primary} />
-      </View>
+      <View style={{ 
+        position: 'absolute', 
+        top: '22%', 
+        left: '10%', 
+        right: '10%', 
+        height: 300, 
+        backgroundColor: suspended ? colors.error : colors.primary,
+        opacity: 0.05,
+        borderRadius: 150,
+      } as any} />
 
       <SafeAreaView style={styles.safeArea}>
         <WaitingHeader onBack={handleBack} />
