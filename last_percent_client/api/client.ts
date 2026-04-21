@@ -6,6 +6,9 @@ import { Config } from '@/constants/Config';
 export const apiClient = axios.create({
   baseURL: Config.BASE_URL,
   timeout: 10000,
+  headers: {
+    'ngrok-skip-browser-warning': 'true',
+  },
 });
 
 apiClient.interceptors.request.use(async (config) => {
