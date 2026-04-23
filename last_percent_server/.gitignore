@@ -12,22 +12,11 @@
 ## [User-specific files]
 *.rsuser
 *.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-## [Build results]
-[Bb]in/
-[Oo]bj/
 
 ## [NuGet Packages]
 *.nupkg
-# The packages folder can be ignored because of PackageReference usage
 **/packages/*
-# except build/, which is used as an MSBuild target.
 !**/packages/build/
-# Uncomment if using old style packages.config
-# **/packages/*
 
 ## [Testing]
 /TestResults/
@@ -42,4 +31,3 @@
 Thumbs.db
 
 project_description.md
-project_description_expo.md
