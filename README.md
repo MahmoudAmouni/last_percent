@@ -8,7 +8,7 @@
 
 ## What is Last Percent?
 
-Last Percent is an anonymous chat app with one rule — **your battery must be at 20% or below to get in.** You're matched with a random stranger in the same situation. No names. No profiles. Just two people and a dying battery.
+Last Percent is an anonymous chat app with one rule  **your battery must be at 20% or below to get in.** You're matched with a random stranger in the same situation. No names. No profiles. Just two people and a dying battery.
 
 ---
 
@@ -43,11 +43,11 @@ Last Percent is an anonymous chat app with one rule — **your battery must be a
   <tr>
     <td align="center" width="30%">
       <img src="./Readme/batterygate1.png" width="100%" style="border-radius:12px"/>
-      <br/><sub><b>Battery Gate — Locked</b></sub>
+      <br/><sub><b>Battery Gate -Locked</b></sub>
     </td>
     <td align="center" width="30%">
       <img src="./Readme/batterygate2.png" width="100%" style="border-radius:12px"/>
-      <br/><sub><b>Battery Gate — Unlocked</b></sub>
+      <br/><sub><b>Battery Gate -Unlocked</b></sub>
     </td>
     <td align="center" width="30%">
       <img src="./Readme/waitingscreen.png" width="100%" style="border-radius:12px"/>
@@ -105,11 +105,11 @@ dotnet run
 
 ## Features
 
-- 🔋 **Battery Gate** — entry locked above 20%
-- 🎲 **Random Matching** — never matched with the same person twice
-- 🔄 **15% Switch** — swap to a new stranger mid-session
-- 🤝 **5% Friend Request** — mutual contact exchange via WhatsApp or email
-- 👤 **Fully Anonymous** — no names, no profiles
+- 🔋 **Battery Gate** - entry locked above 20%
+- 🎲 **Random Matching** - never matched with the same person twice
+- 🔄 **15% Switch** - swap to a new stranger mid-session
+- 🤝 **5% Friend Request** - mutual contact exchange via WhatsApp or email
+- 👤 **Fully Anonymous** - no names, no profiles
 
 ---
 
