@@ -66,7 +66,7 @@ Last Percent is an anonymous chat app with one rule  **your battery must be at 2
       <img src="./Readme/batterygate1.png" width="100%" style="border-radius:12px"/>
     </td>
     <td align="center" width="30%">
-      <h2>Battery Gate - Unlocked</h2>
+      <h3>Battery Gate - Unlocked</h3>
       <img src="./Readme/batterygate2.png" width="100%" style="border-radius:12px"/>
     </td>
     <td align="center" width="30%">
