@@ -48,43 +48,43 @@ Last Percent is an anonymous chat app with one rule  **your battery must be at 2
 <table align="center">
   <tr>
     <td align="center" width="30%">
-      <h4>Welcome</h4>
+      <h2>Welcome</h2>
       <img src="./Readme/welcomescreen.png" width="100%" style="border-radius:12px"/>
     </td>
     <td align="center" width="30%">
-      <h4>Login</h4>
+      <h2>Login</h2>
       <img src="./Readme/login.png" width="100%" style="border-radius:12px"/>
     </td>
     <td align="center" width="30%">
-      <h4>Register</h4>
+      <h2>Register</h2>
       <img src="./Readme/register.png" width="100%" style="border-radius:12px"/>
     </td>
   </tr>
   <tr>
     <td align="center" width="30%">
-      <h4>Battery Gate - Locked</h4>
+      <h2>Battery Gate - Locked</h2>
       <img src="./Readme/batterygate1.png" width="100%" style="border-radius:12px"/>
     </td>
     <td align="center" width="30%">
-      <h4>Battery Gate - Unlocked</h4>
+      <h2>Battery Gate - Unlocked</h2>
       <img src="./Readme/batterygate2.png" width="100%" style="border-radius:12px"/>
     </td>
     <td align="center" width="30%">
-      <h4>Waiting for Match</h4>
+      <h2>Waiting for Match</h2>
       <img src="./Readme/waitingscreen.png" width="100%" style="border-radius:12px"/>
     </td>
   </tr>
   <tr>
     <td align="center" width="30%">
-      <h4>Chat</h4>
+      <h2>Chat</h2>
       <img src="./Readme/chatting.png" width="100%" style="border-radius:12px"/>
     </td>
     <td align="center" width="30%">
-      <h4>Partner Left</h4>
+      <h2>Partner Left</h2>
       <img src="./Readme/partnerleft.png" width="100%" style="border-radius:12px"/>
     </td>
     <td align="center" width="30%">
-      <h4>Suspended Account</h4>
+      <h2>Suspended Account</h2>
       <img src="./Readme/suspension.png" width="100%" style="border-radius:12px"/>
     </td>
   </tr>
