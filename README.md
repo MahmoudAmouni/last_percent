@@ -78,9 +78,8 @@ Last Percent is an anonymous chat app with one rule  **your battery must be at 2
 |---|---|
 | Mobile | React Native (Expo) |
 | Backend | .NET REST API |
-| Real-time | SignalR (WebSockets) |
+| Real-time | Sockets.io |
 | Database | MySQL |
-| State | Zustand |
 | Navigation | Expo Router |
 
 ---
