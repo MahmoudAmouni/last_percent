@@ -33,6 +33,10 @@
   <img src="./Readme/Screenshot 2026-04-22 123858.png" width="30%" />
   <img src="./Readme/Screenshot 2026-04-22 123928.png" width="30%" />
   <img src="./Readme/Screenshot 2026-04-22 124046.png" width="30%" />
+  <br />
+  <img src="./Readme/Screenshot 2026-04-23 105945.png" width="30%" />
+  <img src="./Readme/Screenshot 2026-04-23 110032.png" width="30%" />
+  <img src="./Readme/Screenshot 2026-04-23 110138.png" width="30%" />
 </div>
 
 ## 🛠️ Getting Started
