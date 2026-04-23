@@ -63,11 +63,11 @@ function BatteryIcon() {
 
           <AnimatedRect
             x="20"
-            y="170"
+            y="172"
             width="80"
-            height="12"
-            rx="4"
-            fill="url(#grad)"
+            height="10"
+            rx="2"
+            fill={colors.error}
           />
         </Svg>
       </Animated.View>
