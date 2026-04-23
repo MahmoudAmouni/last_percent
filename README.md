@@ -14,12 +14,28 @@ Last Percent is an anonymous chat app with one rule  **your battery must be at 2
 
 ## How It Works
 
-| Battery | Event |
-|---|---|
-| ≤ 20% | Gates open. You're matched with a stranger. |
-| 15% | Option to switch to a new person. |
-| 5% | Option to exchange contacts before it's over. |
-| 0% | Connection lost. |
+<table width="100%">
+  <tr>
+    <th align="left">Battery</th>
+    <th align="left">Event</th>
+  </tr>
+  <tr>
+    <td>≤ 20%</td>
+    <td>Gates open. You're matched with a stranger.</td>
+  </tr>
+  <tr>
+    <td>15%</td>
+    <td>Option to switch to a new person.</td>
+  </tr>
+  <tr>
+    <td>5%</td>
+    <td>Option to exchange contacts before it's over.</td>
+  </tr>
+  <tr>
+    <td>0%</td>
+    <td>Connection lost.</td>
+  </tr>
+</table>
 
 ---
 
