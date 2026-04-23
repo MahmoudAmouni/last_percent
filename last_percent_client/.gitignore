@@ -36,11 +36,16 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# VS Code
+.vscode/
+
 app-example
 
 # generated native folders
 /ios
 /android
+
+project_description_expo.md
 
 
 
