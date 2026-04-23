@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./last_percent_client/assets/images/last_percent-logo.png" width="140" />
+  <img src="./last_percent_client/assets/images/last_percent-logo.png" width="240" />
   <h1>Last Percent</h1>
   <p><strong>You can only enter when your battery is dying.</strong></p>
 </div>
