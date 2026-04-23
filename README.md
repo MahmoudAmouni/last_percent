@@ -26,17 +26,17 @@
 
 ## 📸 Screenshots
 <div align="center">
-  <img src="./Readme/Screenshot 2026-04-22 123458.png" width="30%" />
-  <img src="./Readme/Screenshot 2026-04-22 123515.png" width="30%" />
-  <img src="./Readme/Screenshot 2026-04-22 123537.png" width="30%" />
+  <img src="./Readme/welcomescreen.png" width="32%" />
+  <img src="./Readme/login.png" width="32%" />
+  <img src="./Readme/register.png" width="32%" />
   <br />
-  <img src="./Readme/Screenshot 2026-04-22 123858.png" width="30%" />
-  <img src="./Readme/Screenshot 2026-04-22 123928.png" width="30%" />
-  <img src="./Readme/Screenshot 2026-04-22 124046.png" width="30%" />
+  <img src="./Readme/batterygate1.png" width="32%" />
+  <img src="./Readme/batterygate2.png" width="32%" />
+  <img src="./Readme/waitingscreen.png" width="32%" />
   <br />
-  <img src="./Readme/Screenshot 2026-04-23 105945.png" width="30%" />
-  <img src="./Readme/Screenshot 2026-04-23 110032.png" width="30%" />
-  <img src="./Readme/Screenshot 2026-04-23 110138.png" width="30%" />
+  <img src="./Readme/chatting.png" width="32%" />
+  <img src="./Readme/partnerleft.png" width="32%" />
+  <img src="./Readme/suspension.png" width="32%" />
 </div>
 
 ## 🛠️ Getting Started
