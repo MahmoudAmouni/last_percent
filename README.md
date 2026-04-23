@@ -2,22 +2,6 @@
   <img src="./last_percent_client/assets/images/last_percent-logo.png" width="140" />
   <h1>Last Percent</h1>
   <p><strong>You can only enter when your battery is dying.</strong></p>
-
-  ![MIT License](https://img.shields.io/badge/license-MIT-black?style=flat-square)
-  ![React Native](https://img.shields.io/badge/React_Native-Expo-black?style=flat-square&logo=expo)
-  ![.NET](https://img.shields.io/badge/.NET-Backend-black?style=flat-square&logo=dotnet)
-  ![MySQL](https://img.shields.io/badge/MySQL-Database-black?style=flat-square&logo=mysql)
-
-</div>
-
----
-
-<div align="center">
-  <img src="./Readme/welcomescreen.png" width="30%" />
-  &nbsp;
-  <img src="./Readme/chatting.png" width="30%" />
-  &nbsp;
-  <img src="./Readme/batterygate1.png" width="30%" />
 </div>
 
 ---
@@ -41,16 +25,50 @@ Last Percent is an anonymous chat app with one rule — **your battery must be a
 
 ## Screenshots
 
-<div align="center">
-  <img src="./Readme/login.png" width="23%" />
-  <img src="./Readme/register.png" width="23%" />
-  <img src="./Readme/batterygate2.png" width="23%" />
-  <img src="./Readme/waitingscreen.png" width="23%" />
-  <br/><br/>
-  <img src="./Readme/chatting.png" width="23%" />
-  <img src="./Readme/partnerleft.png" width="23%" />
-  <img src="./Readme/suspension.png" width="23%" />
-</div>
+<table align="center">
+  <tr>
+    <td align="center" width="30%">
+      <img src="./Readme/welcomescreen.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Welcome</b></sub>
+    </td>
+    <td align="center" width="30%">
+      <img src="./Readme/login.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Login</b></sub>
+    </td>
+    <td align="center" width="30%">
+      <img src="./Readme/register.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Register</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="30%">
+      <img src="./Readme/batterygate1.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Battery Gate — Locked</b></sub>
+    </td>
+    <td align="center" width="30%">
+      <img src="./Readme/batterygate2.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Battery Gate — Unlocked</b></sub>
+    </td>
+    <td align="center" width="30%">
+      <img src="./Readme/waitingscreen.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Waiting for Match</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="30%">
+      <img src="./Readme/chatting.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Chat</b></sub>
+    </td>
+    <td align="center" width="30%">
+      <img src="./Readme/partnerleft.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Partner Left</b></sub>
+    </td>
+    <td align="center" width="30%">
+      <img src="./Readme/suspension.png" width="100%" style="border-radius:12px"/>
+      <br/><sub><b>Suspended Account</b></sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
